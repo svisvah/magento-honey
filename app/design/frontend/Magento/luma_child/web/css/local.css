@@ -1,0 +1,97 @@
+body {
+    background:white!important;
+}
+
+    
+    a.header__icons.my_acc:before{
+  font-family: 'FontAwesome';
+  -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      font-size: 27px;
+      line-height: 28px;
+      color: black !important;
+      margin: 0;
+      vertical-align: top;
+      display: inline-block;
+      font-weight: bold;
+      overflow: hidden;
+      speak: none;
+      text-align: center;
+  
+  content: '\f2c0';
+  }
+a.header__icons {
+    color:black;
+    margin: 0px 12px;
+}
+.minicart-wrapper .action.showcart:before {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-size: 27px;
+    line-height: 28px;
+    color: black;
+    content: black;
+    font-family: 'luma-icons';
+    margin: 0;
+    vertical-align: top;
+    display: inline-block;
+    font-weight: bold;
+    overflow: hidden;
+    speak: none;
+    text-align: center
+}
+.panel .header
+{
+	display:none !important;
+}
+    
+    
+    .price-box .old-price .price ,  
+    .price-box .discounted-price .price ,
+    .discounted-price .price {
+        text-decoration:line-through
+    }
+    
+    .product-info-main .product-info-price .old-price .price-wrapper .price {
+        font-size: 28px;
+        font-weight: 300;
+        margin-right:20px;
+    }
+    .product-info-main .product-info-price .price-box {
+        display: inline-flex;
+        vertical-align: top;
+        width: auto
+    }
+    .gallery-placeholder {
+        position: relative !important;
+        display: inline-block;
+    }
+    
+    .product-label {
+        position: absolute !important;
+        top: 20px;
+        left: 20px;
+        background-color: #fff;
+        padding: 5px;
+        z-index: 3;
+    }
+    .custom-label-container {
+        position: absolute;
+        top: 20px;
+        left: 20px;
+        z-index: 3;
+    }
+    
+    .product-image-container {
+        position: relative;
+    }
+    .discount-block {
+        background-color: red;
+        color: white;
+        font-weight: bold;
+        padding: 5px;
+        position: absolute;
+        top: 0;
+        left: 0;
+    }
+    

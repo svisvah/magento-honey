@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <type name="WholesaleCustomer\ProductRestriction\Observer\CustomerLogin">
+        <arguments>
+            <argument name="logger" 
+            xsi:type="object">Psr\Log\LoggerInterface</argument>
+            <argument name="customerSession"
+             xsi:type="object">Magento\Customer\Model\Session</argument>
+            <argument name="messageManager" 
+            xsi:type="object">Magento\Framework\Message\ManagerInterface</argument>
+            <argument name="redirect" 
+            xsi:type="object">Magento\Framework\App\Response\RedirectInterface</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Block\Product\ProductList\Toolbar">
+        <plugin name="vendor_restrictions_toolbar_plugin" 
+        type="WholesaleCustomer\ProductRestriction\Plugin\ToolbarPlugin" sortOrder="1" />
+    </type>
+    <preference for="Magento\CatalogWidget\Block\Product\ProductsList" 
+    type="WholesaleCustomer\ProductRestriction\Block\ProductsList" />
+    <preference for="Magento\Catalog\Block\Product\Widget\NewWidget" 
+    type="WholesaleCustomer\ProductRestriction\Block\NewWidget" />
+    <preference for="Magento\Catalog\Block\Product\View\Gallery" 
+    type="WholesaleCustomer\ProductRestriction\Block\Discount" />
+    <preference for="Magento\Catalog\Block\Product\ListProduct" 
+    type="WholesaleCustomer\ProductRestriction\Block\ListDiscount" />
+</config>

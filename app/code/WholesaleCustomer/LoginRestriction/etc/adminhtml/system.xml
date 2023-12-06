@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <tab id="custom" translate="label" sortOrder="10">
+            <label>Wholesale Customers</label>
+        </tab>
+        <section id="custom_section" translate="label" type="text" sortOrder="10" 
+        showInDefault="1" showInWebsite="1" showInStore="1">
+            <label>Configurations</label>
+            <tab>custom</tab>
+            <resource>WholesaleCustomer_LoginRestriction::config</resource>
+            <group id="custom_group" translate="label" type="text" 
+            sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Email Configurations</label>
+                <field id="on_register_email" translate="label" 
+                type="text" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>On Register Email</label>
+                </field>
+                <field id="on_approve_email" translate="label" 
+                type="text" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>On Approve Email</label>
+                </field>
+             <field id="register_email_template" translate="label 
+             omment" type="select" sortOrder="70" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Register Email Template</label>
+                    <comment>Email template chosen based on theme fallback when "Default" option is selected.</comment>
+                    <source_model>WholesaleCustomer\LoginRestriction\Model\Config\Source\Email\Template</source_model>
+                </field>
+                 <field id="customer_approve_email" translate="label comment" 
+                 type="select" sortOrder="70" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Customer Approve Email Template</label>
+                    <comment>Email template chosen based on theme fallback when "Default" option is selected.</comment>
+                    <source_model>WholesaleCustomer\LoginRestriction\Model\Config\Source\Email\Template</source_model>
+                </field>
+                 <field id="register_email_to_admin" translate="label comment" type="select" 
+                 sortOrder="70" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Register Email To Admin Template</label>
+                    <comment>Email template chosen based on theme fallback when "Default" option is selected.</comment>
+                    <source_model>WholesaleCustomer\LoginRestriction\Model\Config\Source\Email\Template</source_model>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>

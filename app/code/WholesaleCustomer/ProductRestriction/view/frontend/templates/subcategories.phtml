@@ -1,0 +1,30 @@
+<?php
+$categoryId = 6; // Change this to the ID of your desired category
+
+/** @var \Magento\Catalog\Model\ResourceModel\Category\Collection $subcategories */
+$subcategories = $block->getSubcategories($categoryId);
+$subcategories->addAttributeToSelect(['name', 'image']); // Add image attribute
+
+?>
+
+<?php if ($subcategories->count() > 0) : ?>
+    <h2>Categories</h2>
+    <ul style="list-style: none; padding: 0; display: flex; flex-wrap: wrap;">
+        <?php foreach ($subcategories as $subcategory) : ?>
+            <li style="margin: 10px; text-align: center;">
+                <a href="<?= $subcategory->getUrl() ?>">
+                    <?php if ($subcategory->getImage()) : ?>
+                        <?php
+                        $imagePath =  $subcategory->getImage();
+                        ?>
+                        <img src="<?= $imagePath ?>" alt="<?= $block->escapeHtml($subcategory->getName()) ?>" style="width: 200px; height: 200px; object-fit: cover;">
+
+                    <?php endif; ?>
+                </a>
+                <p><?= $block->escapeHtml($subcategory->getName()) ?></p>
+            </li>
+        <?php endforeach; ?>
+    </ul>
+<?php else : ?>
+    <p>No subcategories found.</p>
+<?php endif; ?>

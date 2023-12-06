@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
+    <event name="customer_login">
+        <observer name="LoginRes_customer_login" instance="WholesaleCustomer\LoginRestriction\Observer\CustomerLogin" />
+    </event>
+      <event name="adminhtml_customer_prepare_save">
+        <observer name="LoginRes_customer_change_customer_group" 
+        instance="WholesaleCustomer\LoginRestriction\Observer\ChangeGroup" />
+    </event>
+    <event name="adminhtml_customer_save_after">
+        <observer name="send_email_customers" instance="WholesaleCustomer\LoginRestriction\Observer\SendWelcomeEmail" />
+    </event>
+     <event name="customer_register_success">
+        <observer name="block_customer" instance="WholesaleCustomer\LoginRestriction\Observer\CustomerRegister" />
+    </event>
+</config>
