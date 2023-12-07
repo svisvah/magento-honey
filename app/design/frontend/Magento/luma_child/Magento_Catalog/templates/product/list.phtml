@@ -59,8 +59,9 @@ $_helper = $block->getData('outputHelper');
                         <?php
                         $block->setProduct($_product); // Set the current product in the block
                         $discountPercentage = $block->getDiscountPercentage();
+                        $sale="Sale";
                         if ($discountPercentage > 0) {
-                            echo '<div class="list-discount-percentage"> ' . $discountPercentage . '%OFF</div>';
+                            echo '<div class="list-discount-percentage"> ' . $sale . '</div>';
                         }
                         ?>
 
@@ -73,6 +74,11 @@ $_helper = $block->getData('outputHelper');
                                     . 'top:' . $productImage->getHeight() . 'px;';
                             }
                             ?>
+                              <div data-role="add-to-links" class="list-actions-secondary">
+                                            <?php if ($addToBlock = $block->getChildBlock('addto')) : ?>
+                                                <?= $addToBlock->setProduct($_product)->getChildHtml() ?>
+                                            <?php endif; ?>
+                                        </div>
                             <?php // Product Image 
                             ?>
                             <a href="<?= $escaper->escapeUrl($_product->getProductUrl()) ?>"
@@ -141,11 +147,7 @@ $_helper = $block->getData('outputHelper');
                                                 $position,
                                                 'product-item-info_' . $_product->getId() . ' div.actions-primary'
                                             ) : '' ?>
-                                        <div data-role="add-to-links" class="actions-secondary">
-                                            <?php if ($addToBlock = $block->getChildBlock('addto')) : ?>
-                                                <?= $addToBlock->setProduct($_product)->getChildHtml() ?>
-                                            <?php endif; ?>
-                                        </div>
+                                      
                                         <?= ($pos && strpos($pos, $viewMode . '-secondary')) ?
                                             /* @noEscape */ $secureRenderer->renderStyleAsTag(
                                                 $position,
