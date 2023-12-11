@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<!--
+/** Grid menu xml
+ * @category  Vendor
+ * @package   WholesaleCustomer_ApproveLog
+ * @author    Vendor
+ * @copyright Copyright (c) 2010-2017 Vendor Software Private Limited (https://Vendor.com)
+ * @license   https://store.Vendor.com/license.html
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
+    <menu>
+        <add id="WholesaleCustomer_ApproveLog::manager" title="Wholesale Customers" module="WholesaleCustomer_ApproveLog" sortOrder="10" resource="WholesaleCustomer_ApproveLog::manager" />
+        <add id="WholesaleCustomer_ApproveLog::add_row" title="Approval Log" module="WholesaleCustomer_ApproveLog" sortOrder="20" parent="WholesaleCustomer_ApproveLog::manager" action="grid/grid" resource="WholesaleCustomer_ApproveLog::add_row"/>
+    </menu>
+</config>

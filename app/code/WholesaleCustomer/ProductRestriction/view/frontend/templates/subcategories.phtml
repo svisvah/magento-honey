@@ -6,25 +6,43 @@ $subcategories = $block->getSubcategories($categoryId);
 $subcategories->addAttributeToSelect(['name', 'image']); // Add image attribute
 
 ?>
-
 <?php if ($subcategories->count() > 0) : ?>
-    <h2>Categories</h2>
-    <ul style="list-style: none; padding: 0; display: flex; flex-wrap: wrap;">
+    <h2 class="category-title">Categories</h2>
+    <div class="owl-carousel">
         <?php foreach ($subcategories as $subcategory) : ?>
-            <li style="margin: 10px; text-align: center;">
+            <div class="item">
                 <a href="<?= $subcategory->getUrl() ?>">
                     <?php if ($subcategory->getImage()) : ?>
                         <?php
                         $imagePath =  $subcategory->getImage();
                         ?>
-                        <img src="<?= $imagePath ?>" alt="<?= $block->escapeHtml($subcategory->getName()) ?>" style="width: 200px; height: 200px; object-fit: cover;">
-
+                        <img class="categpory-image" src="<?= $imagePath ?>" alt="<?= $block->escapeHtml($subcategory->getName()) ?>">
                     <?php endif; ?>
                 </a>
-                <p><?= $block->escapeHtml($subcategory->getName()) ?></p>
-            </li>
+                <p class="category-name"><?= $block->escapeHtml($subcategory->getName()) ?></p>
+            </div>
         <?php endforeach; ?>
-    </ul>
+    </div>
 <?php else : ?>
     <p>No subcategories found.</p>
 <?php endif; ?>
+<script>
+    require(['jquery', 'owlcarousel'], function($){
+    $(document).ready(function(){
+        $(".owl-carousel").owlCarousel({
+            items: 1,
+            margin: 20,
+            responsive: {
+                640: {
+                    items: 2,
+                    margin: 7,
+                },
+                480: {
+                    items: 1,
+                    margin: 7,
+                },
+            },
+        });
+    });
+});
+</script>

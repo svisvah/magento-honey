@@ -40,6 +40,16 @@ xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file
                     <source_model>WholesaleCustomer\LoginRestriction\Model\Config\Source\Email\Template</source_model>
                 </field>
             </group>
+  <group id="approve_log_group" translate="label" type="text" 
+    sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+    <label>Approve Log Configuration</label>
+    <field id="enable_approve_log" translate="label" 
+        type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1" value="1">
+        <label>Enable Approve Log</label>
+        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+    </field>
+</group>
+
         </section>
     </system>
 </config>

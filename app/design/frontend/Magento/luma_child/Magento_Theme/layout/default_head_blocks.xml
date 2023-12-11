@@ -10,6 +10,9 @@
         <meta name="viewport" content="width=device-width, initial-scale=1"/>
         <css src="mage/calendar.css"/>
         <css src="css/local.css" />
+        <!-- <css src="css/owl.carousel.min.css">
+        <css src="css/owl.theme.default.min">
+        <script src="js/owl.carousel.min.js"> -->
         <script src="requirejs/require.js"/>
     </head>
     <body>
