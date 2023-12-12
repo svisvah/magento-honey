@@ -8,9 +8,9 @@ $subcategories->addAttributeToSelect(['name', 'image']); // Add image attribute
 ?>
 <?php if ($subcategories->count() > 0) : ?>
     <h2 class="category-title">Categories</h2>
-    <div class="owl-carousel">
+    <ul class="category-block">
         <?php foreach ($subcategories as $subcategory) : ?>
-            <div class="item">
+            <li class="item">
                 <a href="<?= $subcategory->getUrl() ?>">
                     <?php if ($subcategory->getImage()) : ?>
                         <?php
@@ -20,29 +20,9 @@ $subcategories->addAttributeToSelect(['name', 'image']); // Add image attribute
                     <?php endif; ?>
                 </a>
                 <p class="category-name"><?= $block->escapeHtml($subcategory->getName()) ?></p>
-            </div>
+                    </li>
         <?php endforeach; ?>
-    </div>
+                    </ul>
 <?php else : ?>
     <p>No subcategories found.</p>
 <?php endif; ?>
-<script>
-    require(['jquery', 'owlcarousel'], function($){
-    $(document).ready(function(){
-        $(".owl-carousel").owlCarousel({
-            items: 1,
-            margin: 20,
-            responsive: {
-                640: {
-                    items: 2,
-                    margin: 7,
-                },
-                480: {
-                    items: 1,
-                    margin: 7,
-                },
-            },
-        });
-    });
-});
-</script>
