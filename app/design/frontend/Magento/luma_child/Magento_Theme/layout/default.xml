@@ -15,7 +15,6 @@
     <block class="WholesaleCustomer\ProductRestriction\Block\Subcategories" name="linkboxes"  template="Magento_Theme::header_menu.phtml" after="logo"/>
 </referenceContainer>
 <referenceBlock name="footer_links" remove="true"/>
-<move element="form.subscribe" destination="content" after="-"/>
-  
+<referenceBlock name="form.subscribe" remove="true" />
     </body>
 </page>

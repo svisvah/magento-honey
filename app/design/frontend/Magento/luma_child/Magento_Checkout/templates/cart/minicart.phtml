@@ -12,8 +12,21 @@
 <div data-block="minicart" class="minicart-wrapper">
     <a class="header__icons wishlist_header" href="http://new.magento.com/wishlist/index/index/"></a>
     <a class="header__icons contact_us_header" href="http://new.magento.com/contact/"></a>
-    <a class="header__icons my_acc" href="http://new.magento.com/customer/account/login/referer/aHR0cHM6Ly93d3cuaG9wZXNpbHZlcnMuY29tLw%3D%3D/">Login</a>
 
+    <?php $om = \Magento\Framework\App\ObjectManager::getInstance();
+    $customerSession = $om->get('Magento\Customer\Model\Session');
+    ?>
+
+
+    <?php $customerName = $customerSession->getCustomer()->getFirstname() . ' ' . $customerSession->getCustomer()->getLastname(); ?>
+
+
+
+    <?php if ($customerSession->isLoggedIn()) : ?>
+        <a class="header__icons my_acc account" href="<?= $block->getUrl('customer/account') ?>">Welcome <?= $block->escapeHtml($customerName) ?></a>
+    <?php else : ?>
+        <a class="header__icons my_acc" href="<?= $block->getUrl('customer/account/login') ?>">Login</a>
+    <?php endif; ?>
     <a class="action showcart" href="<?= $block->escapeUrl($block->getShoppingCartUrl()) ?>" data-bind="scope: 'minicart_content'"><label class="cart-label">Cart</label>
 
         <span class="text"><?= $block->escapeHtml(__('My Cart')) ?></span>

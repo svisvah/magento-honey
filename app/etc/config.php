@@ -328,13 +328,16 @@ return [
         'Magento_WishlistAnalytics' => 1,
         'Magento_WishlistGraphQl' => 1,
         'Avada_Proofo' => 1,
-        'Mage_Hello' => 1,
         'Mageplaza_Core' => 1,
         'Mageplaza_BannerSlider' => 1,
         'Mageplaza_Smtp' => 1,
         'PayPal_Braintree' => 1,
         'PayPal_BraintreeGraphQl' => 1,
         'Temando_ShippingRemover' => 1,
+        'Vendor_MagentoCheckout' => 1,
+        'Vendor_MagentoWishlist' => 1,
+        'WholesaleCustomer_ApproveLog' => 1,
+        'WholesaleCustomer_ApproveLogTable' => 1,
         'WholesaleCustomer_LoginRestriction' => 1,
         'WholesaleCustomer_ProductRestriction' => 1
     ]

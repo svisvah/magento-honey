@@ -17,9 +17,23 @@ class Subcategories extends Template
         parent::__construct($context, $data);
     }
 
+    public function getCategories()
+    {
+      
+        $collection = $this->categoryFactory->create()->getCollection()
+        ->addAttributeToSelect('*');
+        return $collection;
+    }
+
     public function getSubcategories($categoryId)
     {
         $category = $this->categoryFactory->create()->load($categoryId);
-        return $category->getChildrenCategories();
+
+        // Check if the category has children
+        if ($category->hasChildren()) {
+            return $category->getChildrenCategories();
+        }
+
+        return [];
     }
 }

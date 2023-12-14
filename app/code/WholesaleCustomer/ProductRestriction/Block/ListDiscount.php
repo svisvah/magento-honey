@@ -55,4 +55,11 @@ class ListDiscount extends ListProduct
 
         return $wishlistProduct && $wishlistProduct->getId();
     }
+    public function getcustomerId()
+    {
+        $om = \Magento\Framework\App\ObjectManager::getInstance();
+        $customerSession = $om->get('Magento\Customer\Model\Session');
+       $customerId=$customerSession->getCustomer()->getId();
+       return $customerId;
+    }
 }

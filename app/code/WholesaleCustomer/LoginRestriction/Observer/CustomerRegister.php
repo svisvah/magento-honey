@@ -117,9 +117,9 @@ class CustomerRegister implements ObserverInterface
                 $this->sendCustomAdminEmail($toEmail, $observer->getEvent()->getCustomer());
             }
             // Display a message for customer approval
-            $this->messageManager->addNoticeMessage(
-                __('Customer approval is required. We will send you an email within 48 hours.')
-            );
+            // $this->messageManager->addNoticeMessage(
+            //     __('Customer approval is required. We will send you an email within 48 hours.')
+            // );
         } else {
             // Get customer name or email as a fallback
             $customerName = $customer->getFirstname() . ' ' . $customer->getLastname();

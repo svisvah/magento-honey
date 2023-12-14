@@ -73,7 +73,8 @@ class CustomerLogin implements ObserverInterface
         if ($customAttributeValue === 'Yes') {
             if ($approve == 'No') {
                 $this->messageManager
-                ->addErrorMessage(__('Admin approval is required to become a wholesale customer.'));
+                ->addErrorMessage(__('Admin approval is required to become a wholesale customer, we wukk notify with
+                approval link within 48 hours.'));
                 $this->customerSession->logout(); // Log out the user
             } else {
                 $redirectUrl = '/customer/account/';

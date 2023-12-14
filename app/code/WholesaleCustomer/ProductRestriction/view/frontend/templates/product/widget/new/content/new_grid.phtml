@@ -1,9 +1,17 @@
 <?php
+
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 ?>
+
+<?php
+  $om = \Magento\Framework\App\ObjectManager::getInstance();
+  $customerSession = $om->get('Magento\Customer\Model\Session');
+  $customerName = $customerSession->getCustomer()->getFirstname() . ' ' . $customerSession->getCustomer()->getLastname(); ?>
+  <?php $customerId=$customerSession->getCustomer()->getId();?>
+  <div class="test"><?php echo $customerId ?></div>
 <?php
 /**
  * Template for displaying new products widget
@@ -42,30 +50,40 @@ if ($exist = ($block->getProductCollection() && $block->getProductCollection()->
                 <ol class="product-items <?= /* @noEscape */ $type ?>">
                     <?php foreach ($items as $_item) : ?>
                         <li class="product-item">
-                            
+
                             <div class="product-item-info">
                                 <?php
                                 $block->setProduct($_item); // Set the current product in the block
                                 $discountPercentage = $block->getDiscountPercentage();
-                                $sale="Sale";
+                                $sale = "Sale";
                                 if ($discountPercentage > 0) {
-                                    echo '<div class="list-discount-percentage"> '. $sale .'</div>';
+                                    echo '<div class="list-discount-percentage"> ' . $sale . '</div>';
                                 }
                                 ?>
-                                     <?php if ($showWishlist) : ?>
-                                                <div class="actions-secondary" data-role="add-to-links">
-                                                    <?php if (
-                                                        $this->helper(Magento\Wishlist\Helper\Data::class)->isAllow()
-                                                        && $showWishlist
-                                                    ) : ?>
-                                                        <a href="#" data-post='<?= /* @noEscape */ $block->getAddToWishlistParams($_item) ?>' class="action towishlist" data-action="add-to-wishlist" title="<?= $block->escapeHtmlAttr(__('Add to Wish List')) ?>">
-                                                            <span><?= $block->escapeHtml(__('Add to Wish List')) ?></span>
-                                                        </a>
-                                                    <?php endif; ?>
-                                                 
-                                                    
-                                                </div>
-                                            <?php endif; ?>
+                                <?php if ($showWishlist) : ?>
+                                    <div class="actions-secondary" data-role="add-to-links">
+                                        <?php
+
+                                        $om = \Magento\Framework\App\ObjectManager::getInstance();
+                                        $customerSession = $om->get('Magento\Customer\Model\Session');
+                                        $customerName = $customerSession->getCustomer()->getFirstname() . ' ' . $customerSession->getCustomer()->getLastname(); ?>
+                                        <?php $customerId=$customerSession->getCustomer()->getId();?>
+                                        <div class="test"><?php echo $customerId ?></div>
+
+
+
+                                        <?php if (
+                                            $this->helper(Magento\Wishlist\Helper\Data::class)->isAllow()
+                                            && $showWishlist
+                                        ) : ?>
+                                            <a href="#" data-post='<?= /* @noEscape */ $block->getAddToWishlistParams($_item) ?>' class="action towishlist" data-action="add-to-wishlist" title="<?= $block->escapeHtmlAttr(__('Add to Wish List')) ?>">
+                                                <span><?= $block->escapeHtml(__('Add to Wish List')) ?></span>
+                                            </a>
+                                        <?php endif; ?>
+
+
+                                    </div>
+                                <?php endif; ?>
                                 <a href="<?= $block->escapeUrl($block->getProductUrl($_item)) ?>" class="product-item-photo">
                                     <?= $block->getImage($_item, $image)->toHtml() ?>
                                 </a>
@@ -115,7 +133,7 @@ if ($exist = ($block->getProductCollection() && $block->getProductCollection()->
                                                     <?php endif; ?>
                                                 </div>
                                             <?php endif; ?>
-                                       
+
                                         </div>
                                     <?php endif; ?>
                                 </div>

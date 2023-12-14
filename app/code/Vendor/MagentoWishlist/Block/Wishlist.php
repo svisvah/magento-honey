@@ -1,8 +1,10 @@
 <?php
+
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Vendor\MagentoWishlist\Block;
 
 use Magento\Customer\Model\Context as CustomerContext;
@@ -51,7 +53,7 @@ class Wishlist extends \Magento\Catalog\Block\Product\ProductList\Item\Block
      */
     public function getCustomerId()
     {
-        return $this->httpContext->getValue(CustomerContext::CONTEXT_AUTH, 0);
+        return $this->httpContext->getValue(CustomerContext::CONTEXT_AUTH,0);
     }
 
     /**
@@ -59,21 +61,21 @@ class Wishlist extends \Magento\Catalog\Block\Product\ProductList\Item\Block
      *
      * @return \Magento\Wishlist\Model\ResourceModel\Item\Collection|null
      */
-    public function getWishlistByProductId()
+    public function getWishlistByProductId($productId, $customerId)
     {
-        $customerId = $this->getCustomerId();
-
+        
         if ($customerId) {
-            $wishlist = $this->wishlist->loadByCustomerId($customerId)->getItemCollection();
-            return $customerId;
-            $objectmanager = \Magento\Framework\App\ObjectManager::getInstance();
-    $objectmanager->get('Psr\Log\LoggerInterface')->info($customerId); //Print log in var/log/system.log
-    $objectmanager->get('Psr\Log\LoggerInterface')->debug($customerId);
+            $wishlist = $this->wishlist->loadByCustomerId($customerId)->getItemCollection();        
+            $productIds = [];
+            foreach ($wishlist as $item) {
+                $productIds[] = $item->getProductId();
+            }
 
-
+            return in_array($productId, $productIds);
         }
 
-        return null;
+        return false;
+       
     }
 
     /**
@@ -85,5 +87,13 @@ class Wishlist extends \Magento\Catalog\Block\Product\ProductList\Item\Block
     public function getWishlistHelper()
     {
         return $this->_wishlistHelper;
+    }
+    public function Customergetname()
+    {
+         $om = \Magento\Framework\App\ObjectManager::getInstance();
+        $customerSession = $om->get('Magento\Customer\Model\Session');
+         $customerName = $customerSession->getCustomer()->getFirstname() . ' ' . $customerSession->getCustomer()->getLastname(); 
+         return $customerName;
+        
     }
 }

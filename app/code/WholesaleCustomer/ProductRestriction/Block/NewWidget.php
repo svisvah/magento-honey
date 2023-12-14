@@ -344,4 +344,5 @@ class NewWidget extends \Magento\Catalog\Block\Product\NewProduct implements \Ma
 
         return 0; // No discount
     }
+    
 }
