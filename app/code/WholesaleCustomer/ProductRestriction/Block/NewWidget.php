@@ -47,15 +47,19 @@ class NewWidget extends \Magento\Catalog\Block\Product\NewProduct implements \Ma
      * @var \Magento\Catalog\Block\Product\Widget\Html\Pager
      */
     protected $_pager;
-    
+
     /**
      * @var CustomerSession
      */
     protected $customerSession;
-
+    /**
+     * @var CustomerSession
+     */
+    protected $wishlist;
     /**
      * @var \Magento\Framework\Serialize\Serializer\Json
      */
+
     private $serializer;
 
     /**
@@ -75,10 +79,12 @@ class NewWidget extends \Magento\Catalog\Block\Product\NewProduct implements \Ma
         \Magento\Catalog\Model\Product\Visibility $catalogProductVisibility,
         \Magento\Framework\App\Http\Context $httpContext,
         CustomerSession $customerSession,
+        \Magento\Wishlist\Model\Wishlist $wishlist,
         array $data = [],
         \Magento\Framework\Serialize\Serializer\Json $serializer = null
     ) {
         $this->customerSession = $customerSession;
+        $this->wishlist = $wishlist;
         parent::__construct(
             $context,
             $productCollectionFactory,
@@ -290,8 +296,8 @@ class NewWidget extends \Magento\Catalog\Block\Product\NewProduct implements \Ma
             ? $arguments['include_container']
             : true;
         $arguments['display_minimal_price'] = isset($arguments['display_minimal_price'])
-            
-        ? $arguments['display_minimal_price']
+
+            ? $arguments['display_minimal_price']
             : true;
 
         /** @var \Magento\Framework\Pricing\Render $priceRender */
@@ -307,12 +313,12 @@ class NewWidget extends \Magento\Catalog\Block\Product\NewProduct implements \Ma
         }
         return $price;
     }
-    
-     /**
-      * Get discount percentage for the product
-      *
-      * @return float
-      */
+
+    /**
+     * Get discount percentage for the product
+     *
+     * @return float
+     */
     public function getDiscountPercentage()
     {
         $product = $this->getProduct();
@@ -344,5 +350,20 @@ class NewWidget extends \Magento\Catalog\Block\Product\NewProduct implements \Ma
 
         return 0; // No discount
     }
-    
+    public function getWishlistByProductId($productId, $customerId)
+    {
+        
+        if ($customerId) {
+            $wishlist = $this->wishlist->loadByCustomerId($customerId)->getItemCollection();        
+            $productIds = [];
+            foreach ($wishlist as $item) {
+                $productIds[] = $item->getProductId();
+            }
+
+            return in_array($productId, $productIds);
+        }
+
+        return false;
+       
+    }
 }

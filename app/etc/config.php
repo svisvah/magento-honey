@@ -334,7 +334,6 @@ return [
         'PayPal_Braintree' => 1,
         'PayPal_BraintreeGraphQl' => 1,
         'Temando_ShippingRemover' => 1,
-        'Vendor_MagentoCheckout' => 1,
         'Vendor_MagentoWishlist' => 1,
         'WholesaleCustomer_ApproveLog' => 1,
         'WholesaleCustomer_ApproveLogTable' => 1,

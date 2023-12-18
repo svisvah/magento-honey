@@ -59,6 +59,9 @@ $_helper = $block->getData('outputHelper');
                         $block->setProduct($_product); // Set the current product in the block
                         $discountPercentage = $block->getDiscountPercentage();
                         $sale="Sale";
+                        $productType=$_product->getTypeId();
+               
+
                         if ($discountPercentage > 0) {
                             echo '<div class="list-discount-percentage"> ' . $sale . '</div>';
                         }
@@ -99,6 +102,8 @@ $_helper = $block->getData('outputHelper');
                                         <div class="actions-primary">
                                             <?php if ($_product->isSaleable()) : ?>
                                                 <?php $postParams = $block->getAddToCartPostParams($_product); ?>
+                                                <?php if ($productType == 'simple' || $productType == 'virtual') :
+                                                        ?>
                                                 <form data-role="tocart-form" data-product-sku="<?= $escaper->escapeHtml($_product->getSku()) ?>" action="<?= $escaper->escapeUrl($postParams['action']) ?>" data-mage-init='{"catalogAddToCart": {}}' method="post">
                                                     <?php $options = $block->getData('viewModel')->getOptionsData($_product); ?>
                                                     <?php foreach ($options as $optionItem) : ?>
@@ -113,6 +118,13 @@ $_helper = $block->getData('outputHelper');
                                                         <span><?= $escaper->escapeHtml(__('Add to Cart')) ?></span>
                                                     </button>
                                                 </form>
+                                                <?php else : ?>
+                                                            <a href="<?= $block->escapeUrl($block->getProductUrl($_product)) ?>">
+                                                                <button type="submit" class="action tocart primary">
+                                                                    <span>View Details</span>
+                                                                </button>
+                                                            </a>
+                                                        <?php endif; ?>
                                             <?php else : ?>
                                                 <?php if ($_product->isAvailable()) : ?>
                                                     <div class="stock available">

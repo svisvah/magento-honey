@@ -7,11 +7,10 @@
 ?>
 
 <?php
-  $om = \Magento\Framework\App\ObjectManager::getInstance();
-  $customerSession = $om->get('Magento\Customer\Model\Session');
-  $customerName = $customerSession->getCustomer()->getFirstname() . ' ' . $customerSession->getCustomer()->getLastname(); ?>
-  <?php $customerId=$customerSession->getCustomer()->getId();?>
-  <div class="test"><?php echo $customerId ?></div>
+$om = \Magento\Framework\App\ObjectManager::getInstance();
+$customerSession = $om->get('Magento\Customer\Model\Session');
+$customerName = $customerSession->getCustomer()->getFirstname() . ' ' . $customerSession->getCustomer()->getLastname(); ?>
+<?php $customerId = $customerSession->getCustomer()->getId(); ?>
 <?php
 /**
  * Template for displaying new products widget
@@ -56,6 +55,7 @@ if ($exist = ($block->getProductCollection() && $block->getProductCollection()->
                                 $block->setProduct($_item); // Set the current product in the block
                                 $discountPercentage = $block->getDiscountPercentage();
                                 $sale = "Sale";
+                                $productType = $_item->getTypeId();
                                 if ($discountPercentage > 0) {
                                     echo '<div class="list-discount-percentage"> ' . $sale . '</div>';
                                 }
@@ -67,16 +67,15 @@ if ($exist = ($block->getProductCollection() && $block->getProductCollection()->
                                         $om = \Magento\Framework\App\ObjectManager::getInstance();
                                         $customerSession = $om->get('Magento\Customer\Model\Session');
                                         $customerName = $customerSession->getCustomer()->getFirstname() . ' ' . $customerSession->getCustomer()->getLastname(); ?>
-                                        <?php $customerId=$customerSession->getCustomer()->getId();?>
-                                        <div class="test"><?php echo $customerId ?></div>
-
-
-
+                                        <?php $customerId = $customerSession->getCustomer()->getId(); ?>
                                         <?php if (
                                             $this->helper(Magento\Wishlist\Helper\Data::class)->isAllow()
                                             && $showWishlist
                                         ) : ?>
-                                            <a href="#" data-post='<?= /* @noEscape */ $block->getAddToWishlistParams($_item) ?>' class="action towishlist" data-action="add-to-wishlist" title="<?= $block->escapeHtmlAttr(__('Add to Wish List')) ?>">
+                                            <?php $productid = $block->getProduct()->getId() ?>
+                                            <?php $isWishlistproductids = $block->getWishlistByProductId($productid, $customerId) ?>
+                                    
+                                            <a href="#" data-post='<?= /* @noEscape */ $block->getAddToWishlistParams($_item) ?>' class="action towishlist <?= $isWishlistproductids ? 'added-to-wishlist' : '' ?>" data-action="add-to-wishlist" title="<?= $block->escapeHtmlAttr(__('Add to Wish List')) ?>">
                                                 <span><?= $block->escapeHtml(__('Add to Wish List')) ?></span>
                                             </a>
                                         <?php endif; ?>
@@ -105,9 +104,19 @@ if ($exist = ($block->getProductCollection() && $block->getProductCollection()->
                                                 <div class="actions-primary">
                                                     <?php if ($_item->isSaleable()) : ?>
                                                         <?php if (!$_item->getTypeInstance()->isPossibleBuyFromList($_item)) : ?>
+                                                            <?php if ($productType == 'simple' || $productType == 'virtual') :
+                                                        ?>
                                                             <button class="action tocart primary" data-mage-init='{"redirectUrl":{"url":"<?= $block->escapeUrl($block->getAddToCartUrl($_item)) ?>"}}' type="button" title="<?= $block->escapeHtmlAttr(__('Add to Cart')) ?>">
                                                                 <span><?= $block->escapeHtml(__('Add to Cart')) ?></span>
                                                             </button>
+                                                            
+                                                        <?php else : ?>
+                                                            <a href="<?= $block->escapeUrl($block->getProductUrl($_item)) ?>">
+                                                                <button type="submit" class="action tocart primary">
+                                                                    <span>View Details</span>
+                                                                </button>
+                                                            </a>
+                                                        <?php endif; ?>
                                                         <?php else : ?>
                                                             <?php
                                                             $postDataHelper = $this->helper(Magento\Framework\Data\Helper\PostHelper::class);

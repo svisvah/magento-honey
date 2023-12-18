@@ -126,18 +126,19 @@ html body .page-header .block-search button.action.search {
 }
 }
 @media only screen and (max-width: 1074px) and (min-width:975px) {
-	 .page-header .block-search {
-    width: 40% !important;
-}
-html body  .page-header .block-search input#search {
-    width: 75% !important;
-        border-radius: 6px !important;
-    border-width: 1.5px !important;
-    height: 35px !important;
-}
-html body .page-header .block-search button.action.search {
-    width: 51% !important;
-}
+    html body  .page-header .block-search {
+        width: 35% !important;
+        float:right !important;
+    }
+    html body .page-header .block-search input#search {
+        width: 95% !important;
+            border-radius: 6px !important;
+        border-width: 1.5px !important;
+        height: 35px !important;
+    }
+    html body .page-header .block-search button.action.search {
+        width: 18% !important;
+    }
 }
 
 @media only screen and (max-width: 976px) and (min-width:854px) {
@@ -209,23 +210,7 @@ html body .navigation .level0.parent>.level-top {
        width: unset !important ;
 }
 }
-html body a.header__icons.my_acc:before {
-    /* font-family: 'FontAwesome' !important; */
-    -webkit-font-smoothing: antialiased !important;
-    -moz-osx-font-smoothing: grayscale !important;
-    /* font-size: 14px !important; */
-    line-height: 27px !important;
-    color: #575757  !important;
-    margin-right: 10px !important;
-    vertical-align: top !important;
-    display: inline-block !important;
-    font-weight: 500 !important;
-    overflow: hidden !important;
-    speak: none !important;
-    text-align: center !important;
-    margin-left: -10px !important;
-    content: url(https://www.licious.in/image/rebranding/svg/profile-grey.svg) !important;
-}
+
 html body .minicart-wrapper .action.showcart:before {
     color: #575757 !important;
     content: #575757 !important;
@@ -492,8 +477,8 @@ html body .old-price
 }
 
 
-html body button.action.tocart.primary {
-    width: 100% !important;
+ button.action.tocart.primary {
+    width: 100% ;
 }
 html body .actions-primary {
     width: 100% !important;
@@ -506,7 +491,7 @@ html body .product-item-details {
 	position:relative !important;
 	padding: 5px 15px !important;
 }
-@media only screen and (min-width:768px)
+@media only screen and (min-width:769px)
 {
 	html body .category-dropdown
 	{
@@ -518,7 +503,7 @@ html body .product-item-details {
 	}
 	
 }
-@media only screen and (max-width:767px)
+@media only screen and (max-width:768px)
 {
 	html body .category-dropdown
 	{
@@ -933,4 +918,212 @@ html body a.action.towishlist.added-to-wishlist {
 .catalog-category-view .category-image img
 {
 	display:none !important;
+}
+
+html body .catalog-category-view .category-image img
+{
+	display: none !important;
+}
+a.action.towishlist.added-to-wishlist {
+    color: red !important;
+}
+a.action.compare {
+    display: none !important;
+}
+.minicart-wrapper .product .actions {
+    float: left;
+    margin: -26px 110px 0;
+}
+html body .account .wishlist-index-index .product-item-comment
+{
+	display: none !important;
+}
+
+.catalog-category-view .category-image img
+{
+	display:none;
+}
+.page-with-filter .toolbar-amount {
+    position: static;
+    display: none;
+}
+
+a.action.towishlist.added-to-wishlist {
+    color: red !important;
+}
+a.action.compare {
+    display: none !important;
+}
+.minicart-wrapper .product .actions {
+    float: left;
+    margin: -26px 110px 0;
+}
+html body .account .wishlist-index-index .product-item-comment
+{
+	display: none !important;
+}
+
+.catalog-category-view .category-image img
+{
+	display:none;
+}
+.page-with-filter .toolbar-amount {
+    position: static;
+    display: none;
+}
+
+html body .header-category-title:before {
+    content: url(https://www.licious.in/image/rebranding/svg/categories-grey.svg) !important;
+    position: relative !important;
+    top: 5px !important;
+    left: -10px !important;
+    color: #0d0d0e !important;
+}
+@media only screen and (max-width:345px) and (min-width:336px)
+{
+	.block-search .label:before {
+    -webkit-font-smoothing: antialiased !important;
+    -moz-osx-font-smoothing: grayscale !important;
+    font-size: 20px !important;
+    line-height: 63px !important;
+    color: #757575 !important;
+    content: '\e615' !important;
+    font-family: 'luma-icons' !important;
+    margin: 0 10px 0 0 !important;
+    vertical-align: middle !important;
+    display: inline-block !important;
+    font-weight: normal !important;
+    overflow: hidden !important;
+    speak: none !important;
+    text-align: center !important;
+    position: relative !important;
+    top: -44px !important;
+    left: -52px;
+}
+}
+@media only screen and (max-width: 335px) and (min-width: 320px){
+html body .block-search .label:before {
+    font-size: 20px !important;
+    line-height: 25px !important;
+    color: #757575 !important;
+    content: '\e615' !important;
+    font-family: 'luma-icons' !important;
+    margin: 0 10px 0 0 !important;
+    vertical-align: middle !important;
+    display: inline-block !important;
+    font-weight: normal !important;
+    overflow: hidden !important;
+    speak: none !important;
+    text-align: center !important;
+    position: relative !important;
+    top: -26px !important;
+    left: -48px !important;
+}
+}
+/* Display the "Menu" tab and its content by default */
+.sections.nav-sections .section-item-content#store\\.menu,
+.sections.nav-sections .section-item-title.active[data-collapsible="true"] {
+  display: block !important;
+}
+
+/* Display the navigation links in the "Menu" tab by default */
+.sections.nav-sections .section-item-content#store\\.menu .navigation {
+  display: block !important;
+}
+
+/* Hide the navigation links in the "Account" tab */
+.sections.nav-sections .section-item-content#store\\.links .navigation {
+  display: none !important;
+}
+
+/* Display the "Account" tab by default */
+.sections.nav-sections .section-item-content#store\\.links,
+.sections.nav-sections .section-item-title[data-collapsible="true"] {
+  display: block !important;
+}
+
+/* Display the account links in the "Account" tab by default */
+.sections.nav-sections .section-item-content#store\\.links .customer-menu {
+  display: block !important;
+}
+.minicart-items .product-item-details {
+    padding-left: 88px !important;
+}
+.profile-login {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+}
+img#login-id-image {
+    width: 20px;
+    height: 20px;
+ 
+}
+.product-item .price-box {
+    margin: 10px 0px 25px !important;
+}
+.minicart-wrapper .product .actions {
+    float: right;
+    margin: -28px 0 0;
+}
+html body .category-dropdown {
+    position: absolute !important;
+    top: 26px !important;
+    left: 20% !important;
+}
+@media only screen and (max-width:1150px) and (min-width:1025px)
+{
+
+html body .category-dropdown {
+    position: absolute !important;
+    top: 26px !important;
+    left: 22% !important;
+}
+}
+@media only screen and (max-width:1025px) and (min-width:768px)
+{
+
+html body .category-dropdown {
+    position: absolute !important;
+    top: 26px !important;
+    left: 25% !important;
+}
+}
+
+ button.sidebar-action.tocart.primary {
+    width: 80% ;
+    color: white;
+    background-color: #566c00
+}
+html body .sidebar-actions-primary {
+    width: 80% !important;
+}
+.header.page-header {
+    margin-bottom: 10px;
+}
+.page-products .product-item-info {
+    width: 240px;
+    position: relative;
+}
+.product-social-links .action.towishlist:before,.block-bundle-summary .action.towishlist:before,.product-item .action.towishlist:before,.table-comparison .action.towishlist:before {
+    content: url("http://new.magento.com/media/wishlist_icons/before.png");
+   width: 25px;
+}
+.action.towishlist.added-to-wishlist:before {
+	content: url("http://new.magento.com/media/wishlist_icons/after.png");
+   width: 25px;
+    
+}
+.swatch-attribute {
+    display: none;
+}
+
+.product-items .widget-product-grid .swatch-attribute
+{
+	display: none !important;
+}
+.home_tags_sec {
+    margin-top: 30px;
+    margin-bottom: 35px;
 }

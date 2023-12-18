@@ -106,6 +106,12 @@ class ProductsList extends AbstractProduct implements BlockInterface, IdentityIn
 
     protected $customerSession;
 
+       /**
+     * @var CustomerSession
+     */
+
+     protected $wishlist;
+
     /**
      * Json Serializer Instance
      *
@@ -159,6 +165,7 @@ class ProductsList extends AbstractProduct implements BlockInterface, IdentityIn
         Rule $rule,
         Conditions $conditionsHelper,
         CustomerSession $customerSession,
+        \Magento\Wishlist\Model\Wishlist $wishlist,
         array $data = [],
         Json $json = null,
         LayoutFactory $layoutFactory = null,
@@ -178,6 +185,7 @@ class ProductsList extends AbstractProduct implements BlockInterface, IdentityIn
         $this->categoryRepository = $categoryRepository ?? ObjectManager::getInstance()
             ->get(CategoryRepositoryInterface::class);
         $this->customerSession = $customerSession;
+        $this->wishlist = $wishlist;
         parent::__construct(
             $context,
             $data
@@ -627,6 +635,22 @@ class ProductsList extends AbstractProduct implements BlockInterface, IdentityIn
         }
 
         return 0; // No discount
+    }
+    public function getWishlistByProductId($productId, $customerId)
+    {
+        
+        if ($customerId) {
+            $wishlist = $this->wishlist->loadByCustomerId($customerId)->getItemCollection();        
+            $productIds = [];
+            foreach ($wishlist as $item) {
+                $productIds[] = $item->getProductId();
+            }
+
+            return in_array($productId, $productIds);
+        }
+
+        return false;
+       
     }
 }
 
