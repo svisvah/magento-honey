@@ -1,0 +1,82 @@
+<?php
+/** @var \WholesaleCustomer\ProductRestriction\Block\Subcategories $block */
+$categories = $block->getCategories();
+?>
+<style>
+  /* Container for the entire dropdown */
+  .category-dropdown {
+    position: relative;
+    display: inline-block;
+  }
+
+  /* Style for the header (Categories) */
+  .header-category-title {
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+
+  /* Dropdown Content (Hidden by Default) */
+  .dropdown-content {
+    background: #fff;
+    border: 1px solid #ccc;
+    box-shadow: 0 5px 5px rgba(0, 0, 0, 0.19);
+    font-weight: 400;
+    min-width: 230px;
+    padding: 0;
+    display: none;
+    left: 0;
+    margin: 0 !important;
+    position: absolute;
+    z-index: 1;
+  }
+
+  /* Style for main categories */
+  .dropdown-content .main-category {
+    font-weight: bold;
+  }
+
+  /* Links inside the dropdown */
+  .dropdown-content a {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+  }
+
+  /* Change color of dropdown links on hover */
+  .dropdown-content a:hover {
+    background-color: #ddd;
+  }
+
+  /* Show the dropdown menu on hover */
+  .category-dropdown:hover .dropdown-content {
+    display: block;
+  }
+</style>
+
+<div class="category-dropdown">
+    <p class="header-category-title">Categories</p>
+    <?php if ($categories->count() > 0) : ?>
+        <div class="dropdown-content">
+            <?php foreach ($categories as $category) : ?>
+                <div class="main-category">
+                    <a href="<?= $category->getUrl() ?>">
+                        <?= $block->escapeHtml($category->getName()) ?>
+                    </a>
+                </div>
+                <?php
+                $subcategories = $block->getSubcategories($category->getId());
+                ?>
+                <?php if ($subcategories !== null && count($subcategories) > 0) : ?>
+                    <div class="sub-category-dropdown">
+                        <?php foreach ($subcategories as $subcategory) : ?>
+                            <a href="<?= $subcategory->getUrl() ?>">
+                                <?= $block->escapeHtml($subcategory->getName()) ?>
+                            </a>
+                        <?php endforeach; ?>
+                    </div>
+                <?php endif; ?>
+            <?php endforeach; ?>
+        </div>
+    <?php endif; ?>
+</div>

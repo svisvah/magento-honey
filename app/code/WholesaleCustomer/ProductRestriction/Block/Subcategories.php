@@ -19,9 +19,10 @@ class Subcategories extends Template
 
     public function getCategories()
     {
-      
         $collection = $this->categoryFactory->create()->getCollection()
-        ->addAttributeToSelect('*');
+            ->addAttributeToSelect('*')
+            ->addAttributeToFilter('is_active', 1); // Filter out disabled categories
+
         return $collection;
     }
 

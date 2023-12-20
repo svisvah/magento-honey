@@ -48,10 +48,25 @@ use Magento\Framework\App\Action\Action;
                             $productType = $_item->getTypeId();
                             $discountPercentage = $block->getDiscountPercentage();
                             $sale = "Sale";
-
-                            if ($discountPercentage > 0) {
+                            $wholesaleproduct=$_item->getData('wholesale_visibility');
+                            $wholesalelabel="Wholesale";
+                            if($discountPercentage>0 && $wholesaleproduct>0)
+                            {
                                 echo '<div class="list-discount-percentage"> ' . $sale . '</div>';
+                                echo '<div class="wholesale-product wholesale-color list-discount-percentage"> ' . $wholesalelabel . '</div>';
                             }
+                            elseif($wholesaleproduct>0)
+                            {
+                                echo '<div class="wholesale-color list-discount-percentage"> ' . $wholesalelabel . '</div>';
+
+                            }
+                            elseif($discountPercentage)
+                            {
+                                echo '<div class="list-discount-percentage"> ' . $sale . '</div>';
+
+                            }
+
+
                             ?>
 
                             <?php $om = \Magento\Framework\App\ObjectManager::getInstance();
@@ -59,7 +74,6 @@ use Magento\Framework\App\Action\Action;
                             <?php $customerId = $customerSession->getCustomer()->getId(); ?>
                             <?php if ($showWishlist) : ?>
                                 <?php $productid = $block->getProduct()->getId() ?>
-                                <div class="productType"><?php echo $productType ?></div>
                                 <?php $isWishlistproductids = $block->getWishlistByProductId($productid, $customerId) ?>
 
                                 <div class="actions-secondary" data-role="add-to-links">

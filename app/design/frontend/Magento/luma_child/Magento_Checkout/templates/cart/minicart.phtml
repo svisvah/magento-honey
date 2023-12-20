@@ -8,12 +8,18 @@
 /** @var $block \Magento\Checkout\Block\Cart\Sidebar */
 /** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
 ?>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
 <div data-block="minicart" class="minicart-wrapper">
     <a class="header__icons wishlist_header" href="http://new.magento.com/wishlist/index/index/"></a>
     <a class="header__icons contact_us_header" href="http://new.magento.com/contact/"></a>
     <div class="profile-login">
-    <img src="https://www.licious.in/image/rebranding/svg/profile-grey.svg" alt="logo" id="login-id-image">
+        <?php $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+$storeManager = $objectManager->get(\Magento\Store\Model\StoreManagerInterface::class);
+$mediaUrl = $storeManager->getStore()->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_MEDIA);
+$image= $mediaUrl."header_icons/login.png";
+?>
+    <img src="<?php echo $image ?>" alt="logo" id="login-id-image"> 
+    <!-- <img src="https://www.licious.in/image/rebranding/svg/profile-grey.svg" alt="logo" id="login-id-image"> -->
     <?php $om = \Magento\Framework\App\ObjectManager::getInstance();
     $customerSession = $om->get('Magento\Customer\Model\Session');
     ?>

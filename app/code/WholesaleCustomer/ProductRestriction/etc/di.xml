@@ -24,6 +24,6 @@ xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xs
     <preference for="Magento\Catalog\Block\Product\View\Gallery" 
     type="WholesaleCustomer\ProductRestriction\Block\Discount" />
     <preference for="Magento\Catalog\Block\Product\ListProduct" 
-    type="WholesaleCustomer\ProductRestriction\Block\ListProduct" />
+    type="WholesaleCustomer\ProductRestriction\Block\ListProducts" />
   
 </config>

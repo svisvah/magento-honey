@@ -72,27 +72,20 @@ $createAccountButtonViewModel = $block->getData('create_account_button_view_mode
             <?= $_gender->setGender($formData->getGender())->toHtml() ?>
         <?php endif ?>
         <?= $block->getChildHtml('fieldset_create_info_additional') ?>
-    </fieldset>
-
-    <div class="field required">
-    <label class="label" for="contact_number">
-        <span><?php echo __('Contact Number');?></span>
+    </fieldset>  
+<legend class="legend"><span><?= $escaper->escapeHtml(__('Wholesale Information')) ?></span></legend>
+<div class="field required">
+    <label class="label-wholesale-customers" for="wholesale-customers">
+        <span><?php echo __('Want to become Wholesale Customers?');?></span>
     </label>
-    <div class="control">
-        <input type="text" name="contact_number" id="contact_number" value=""
-               title="<?php echo __('Contact Number'); ?>" class="input-text" data-validate="{required:true}">
-    </div>
-</div>
-
-<div class="field">
-    <label class="label"><?= $block->escapeHtml(__('Want to become wholesale customer')) ?></label>
-    <div class="control">
+    <div class="control-wholesale">
+        <br>
         <input type="radio" name="want_to_become_wholesale_customer" id="want_to_become_wholesale_customer_yes" value="1" <?php echo $block->getFormData()->getWantToBecomeWholesaleCustomer() == 1 ? 'checked="checked"' : ''; ?> />
-        <label for="want_to_become_wholesale_customer_yes"><?= $block->escapeHtml(__('Yes')) ?></label>
-
+        <label class="wholesale-yes" for="want_to_become_wholesale_customer_yes"><?= $block->escapeHtml(__('Yes')) ?></label>
         <input type="radio" name="want_to_become_wholesale_customer" id="want_to_become_wholesale_customer_no" value="0" <?php echo $block->getFormData()->getWantToBecomeWholesaleCustomer() == 0 ? 'checked="checked"' : ''; ?> />
         <label for="want_to_become_wholesale_customer_no"><?= $block->escapeHtml(__('No')) ?></label>
     </div>
+    <br>
 </div>
 
 
@@ -267,6 +260,15 @@ $createAccountButtonViewModel = $block->getData('create_account_button_view_mode
                        data-validate="{required:true, 'validate-email':true}">
             </div>
         </div>
+    <div class="field required">
+    <label class="label" for="contact_number">
+        <span><?php echo __('Contact Number');?></span>
+    </label>
+    <div class="control">
+        <input type="text" name="contact_number" id="contact_number" value=""
+               title="<?php echo __('Contact Number'); ?>" class="input-text" data-validate="{required:true}" >
+    </div>
+</div>
         <div class="field password required">
             <label for="password" class="label"><span><?= $escaper->escapeHtml(__('Password')) ?></span></label>
             <div class="control">

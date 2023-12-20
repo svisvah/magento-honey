@@ -16,5 +16,12 @@
 </referenceContainer>
 <referenceBlock name="footer_links" remove="true"/>
 <referenceBlock name="form.subscribe" remove="true" />
+<referenceContainer name="footer">
+    <block class="Magento\Cms\Block\Block" name="footer_block">
+        <arguments>
+            <argument name="block_id" xsi:type="string">customfooter</argument>
+        </arguments>
+    </block>
+</referenceContainer>
     </body>
 </page>

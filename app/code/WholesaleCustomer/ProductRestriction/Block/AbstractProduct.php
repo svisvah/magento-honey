@@ -251,6 +251,7 @@ class AbstractProduct extends \Magento\Framework\View\Element\Template
             ->addTaxPercents()
             ->addAttributeToSelect($this->_catalogConfig->getProductAttributes())
             ->addUrlRewrite();
+            
     }
 
     /**

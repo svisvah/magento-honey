@@ -52,14 +52,38 @@ if ($exist = ($block->getProductCollection() && $block->getProductCollection()->
 
                             <div class="product-item-info">
                                 <?php
-                                $block->setProduct($_item); // Set the current product in the block
-                                $discountPercentage = $block->getDiscountPercentage();
-                                $sale = "Sale";
-                                $productType = $_item->getTypeId();
-                                if ($discountPercentage > 0) {
-                                    echo '<div class="list-discount-percentage"> ' . $sale . '</div>';
-                                }
-                                ?>
+                                         $block->setProduct($_item); // Set the current product in the block
+                                         $productType = $_item->getTypeId();
+                                         $discountPercentage = $block->getDiscountPercentage();
+                                         $sale = "Sale";
+                                         $wholesaleproduct=$_item->getData('wholesale_visibility');
+                                         $wholesalelabel="Wholesale";
+                                        //  if ($discountPercentage > 0) {
+                                        //      echo '<div class="list-discount-percentage"> ' . $sale . '</div>';
+                                        //  }
+                                        //  if($wholesaleproduct>0)
+                                        //  {
+                                        //      echo '<div class="wholesale-product"> ' . $wholesalelabel . '</div>';
+                                        //  }
+                                        if($discountPercentage>0 && $wholesaleproduct>0)
+                            {
+                                echo '<div class="list-discount-percentage"> ' . $sale . '</div>';
+                                echo '<div class="wholesale-product wholesale-color list-discount-percentage"> ' . $wholesalelabel . '</div>';
+                            }
+                            elseif($wholesaleproduct>0)
+                            {
+                                echo '<div class="wholesale-color list-discount-percentage"> ' . $wholesalelabel . '</div>';
+
+                            }
+                            elseif($discountPercentage)
+                            {
+                                echo '<div class="list-discount-percentage"> ' . $sale . '</div>';
+
+                            }
+                                         ?>
+                                         
+             
+                            
                                 <?php if ($showWishlist) : ?>
                                     <div class="actions-secondary" data-role="add-to-links">
                                         <?php

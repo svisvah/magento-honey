@@ -61,10 +61,23 @@ $_helper = $block->getData('outputHelper');
                         $sale="Sale";
                         $productType=$_product->getTypeId();
                
+                        $wholesaleproduct=$_product->getData('wholesale_visibility');
+                        $wholesalelabel="Wholesale";
+                        if($discountPercentage>0 && $wholesaleproduct>0 )
+                            {
+                                echo '<div class="list-discount-percentage"> ' . $sale . '</div>';
+                                echo '<div class="wholesale-product wholesale-color list-discount-percentage"> ' . $wholesalelabel . '</div>';
+                            }
+                            elseif($wholesaleproduct>0)
+                            {
+                                echo '<div class="wholesale-color list-discount-percentage"> ' . $wholesalelabel . '</div>';
 
-                        if ($discountPercentage > 0) {
-                            echo '<div class="list-discount-percentage"> ' . $sale . '</div>';
-                        }
+                            }
+                            elseif($discountPercentage)
+                            {
+                                echo '<div class="list-discount-percentage"> ' . $sale . '</div>';
+
+                            }
                         ?>
                         <div data-role="add-to-links" class="actions-secondary">
                             <?php if ($addToBlock = $block->getChildBlock('addto')) : ?>
