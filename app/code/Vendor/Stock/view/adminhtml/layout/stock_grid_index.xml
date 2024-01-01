@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Vendor Grid Product Map Layout
+ * @category  Vendor
+ * @package   Vendor\_Grid
+ * @author    Vendor
+ * @copyright Copyright (c) 2010-2017 Vendor\ Software Private Limited (https://Vendor.com)
+ * @license   https://store.Vendor.com/license.html
+ */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceContainer name="content">
+            <!-- here we call our ui component of grid-->
+            <uiComponent name="stock_record_grid_list"/>
+        </referenceContainer>
+    </body>
+</page>
