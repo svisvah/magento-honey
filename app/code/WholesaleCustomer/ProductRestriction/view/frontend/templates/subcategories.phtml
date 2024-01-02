@@ -6,7 +6,7 @@ $subcategories = $block->getSubcategories($categoryId);
 $subcategories->addAttributeToSelect(['name', 'image']); // Add image attribute
 
 ?>
-<?php if ($subcategories->count() > 0) : ?>
+<?php if ($subcategories->count() > 0): ?>
     <h2 class="category-title">Categories</h2>
     <ul class="category-block">
         <?php foreach ($subcategories as $subcategory) : ?>
@@ -16,13 +16,14 @@ $subcategories->addAttributeToSelect(['name', 'image']); // Add image attribute
                         <?php
                         $imagePath =  $subcategory->getImage();
                         ?>
-                        <img class="categpory-image" src="<?= $imagePath ?>" alt="<?= $block->escapeHtml($subcategory->getName()) ?>">
+                        <img class="categpory-image" src="<?= $imagePath ?>"
+                         alt="<?= $block->escapeHtml($subcategory->getName())?>">
                     <?php endif; ?>
                 </a>
                 <p class="category-name"><?= $block->escapeHtml($subcategory->getName()) ?></p>
-                    </li>
+            </li>
         <?php endforeach; ?>
-                    </ul>
+    </ul>
 <?php else : ?>
     <p>No subcategories found.</p>
 <?php endif; ?>

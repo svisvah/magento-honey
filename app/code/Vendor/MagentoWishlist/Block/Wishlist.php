@@ -53,19 +53,21 @@ class Wishlist extends \Magento\Catalog\Block\Product\ProductList\Item\Block
      */
     public function getCustomerId()
     {
-        return $this->httpContext->getValue(CustomerContext::CONTEXT_AUTH,0);
+        return $this->httpContext->getValue(CustomerContext::CONTEXT_AUTH, 0);
     }
 
     /**
      * Get wishlist items by customer ID
-     *
+
+     * @param int $productId
+     * @param int $customerId
      * @return \Magento\Wishlist\Model\ResourceModel\Item\Collection|null
      */
     public function getWishlistByProductId($productId, $customerId)
     {
-        
+
         if ($customerId) {
-            $wishlist = $this->wishlist->loadByCustomerId($customerId)->getItemCollection();        
+            $wishlist = $this->wishlist->loadByCustomerId($customerId)->getItemCollection();
             $productIds = [];
             foreach ($wishlist as $item) {
                 $productIds[] = $item->getProductId();
@@ -75,7 +77,6 @@ class Wishlist extends \Magento\Catalog\Block\Product\ProductList\Item\Block
         }
 
         return false;
-       
     }
 
     /**
@@ -87,13 +88,5 @@ class Wishlist extends \Magento\Catalog\Block\Product\ProductList\Item\Block
     public function getWishlistHelper()
     {
         return $this->_wishlistHelper;
-    }
-    public function Customergetname()
-    {
-         $om = \Magento\Framework\App\ObjectManager::getInstance();
-        $customerSession = $om->get('Magento\Customer\Model\Session');
-         $customerName = $customerSession->getCustomer()->getFirstname() . ' ' . $customerSession->getCustomer()->getLastname(); 
-         return $customerName;
-        
     }
 }

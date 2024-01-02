@@ -70,6 +70,7 @@ class NewWidget extends \Magento\Catalog\Block\Product\NewProduct implements \Ma
      * @param \Magento\Catalog\Model\Product\Visibility $catalogProductVisibility
      * @param \Magento\Framework\App\Http\Context $httpContext
      * @param CustomerSession $customerSession
+     * @param \Magento\Wishlist\Model\Wishlist $wishlist
      * @param array $data
      * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
      */
@@ -350,11 +351,18 @@ class NewWidget extends \Magento\Catalog\Block\Product\NewProduct implements \Ma
 
         return 0; // No discount
     }
+    /**
+     * Retrieve the discount percentage for the current product
+     *
+     * @return bool
+     * @param int $productId
+     * @param int $customerId
+     */
     public function getWishlistByProductId($productId, $customerId)
     {
-        
+
         if ($customerId) {
-            $wishlist = $this->wishlist->loadByCustomerId($customerId)->getItemCollection();        
+            $wishlist = $this->wishlist->loadByCustomerId($customerId)->getItemCollection();
             $productIds = [];
             foreach ($wishlist as $item) {
                 $productIds[] = $item->getProductId();
@@ -364,6 +372,5 @@ class NewWidget extends \Magento\Catalog\Block\Product\NewProduct implements \Ma
         }
 
         return false;
-       
     }
 }

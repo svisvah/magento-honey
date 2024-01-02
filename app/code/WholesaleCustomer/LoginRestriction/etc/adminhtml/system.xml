@@ -21,6 +21,10 @@ xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file
                 type="text" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>On Approve Email</label>
                 </field>
+                <field id="wholesale_pending_email" translate="label" 
+                type="text" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Wholesale Customer Pending Approval Email</label>
+                </field>
              <field id="register_email_template" translate="label 
              omment" type="select" sortOrder="70" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Register Email Template</label>
@@ -39,6 +43,12 @@ xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file
                     <comment>Email template chosen based on theme fallback when "Default" option is selected.</comment>
                     <source_model>WholesaleCustomer\LoginRestriction\Model\Config\Source\Email\Template</source_model>
                 </field>
+                <field id="wholesale_customer_pending_template" translate="label comment" type="select" 
+                 sortOrder="70" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Wholesale Customers Approval Pending Template</label>
+                    <comment>Email template chosen based on theme fallback when "Default" option is selected.</comment>
+                    <source_model>WholesaleCustomer\LoginRestriction\Model\Config\Source\Email\Template</source_model>
+                </field>
             </group>
   <group id="approve_log_group" translate="label" type="text" 
     sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
@@ -50,6 +60,15 @@ xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file
     </field>
 </group>
 
+<group id="outofstock_group" translate="label" type="text" 
+    sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+    <label>Out of Stock Configuration</label>
+    <field id="outofstock_template" translate="label" 
+        type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1" value="1">
+         <label>Out of stock notification Template</label>
+        <source_model>WholesaleCustomer\LoginRestriction\Model\Config\Source\Email\Template</source_model>
+    </field>
+</group>
         </section>
     </system>
 </config>

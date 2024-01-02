@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<!--
+/** Grid adminhtml routes xml
+ * @category  Vendor
+ * @package   Vendor_AdminProductAlert
+ * @author    Vendor
+ * @copyright Copyright (c) 2010-2016 Vendor Software Private Limited (https://Vendor.com)
+ * @license   https://store.Vendor.com/license.html
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:App/etc/routes.xsd">
+    <router id="admin">
+        <route id="stock" frontName="stock">
+            <module name="Vendor_AdminProductAlert" />
+        </route>
+    </router>
+</config>

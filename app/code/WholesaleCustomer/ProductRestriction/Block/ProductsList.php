@@ -106,11 +106,11 @@ class ProductsList extends AbstractProduct implements BlockInterface, IdentityIn
 
     protected $customerSession;
 
-       /**
+    /**
      * @var CustomerSession
      */
 
-     protected $wishlist;
+    protected $wishlist;
 
     /**
      * Json Serializer Instance
@@ -148,6 +148,7 @@ class ProductsList extends AbstractProduct implements BlockInterface, IdentityIn
      * @param Rule $rule
      * @param Conditions $conditionsHelper
      * @param CustomerSession $customerSession
+     * @param \Magento\Wishlist\Model\Wishlist $wishlist
      * @param array $data
      * @param Json|null $json
      * @param LayoutFactory|null $layoutFactory
@@ -636,11 +637,18 @@ class ProductsList extends AbstractProduct implements BlockInterface, IdentityIn
 
         return 0; // No discount
     }
+    /**
+     * Retrieve the discount percentage for the current product
+     *
+     * @return bool
+     * @param int $productId
+     * @param int $customerId
+     */
     public function getWishlistByProductId($productId, $customerId)
     {
-        
+
         if ($customerId) {
-            $wishlist = $this->wishlist->loadByCustomerId($customerId)->getItemCollection();        
+            $wishlist = $this->wishlist->loadByCustomerId($customerId)->getItemCollection();
             $productIds = [];
             foreach ($wishlist as $item) {
                 $productIds[] = $item->getProductId();
@@ -650,7 +658,6 @@ class ProductsList extends AbstractProduct implements BlockInterface, IdentityIn
         }
 
         return false;
-       
     }
 }
 

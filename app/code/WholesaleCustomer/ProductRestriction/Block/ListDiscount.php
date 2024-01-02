@@ -42,24 +42,4 @@ class ListDiscount extends ListProduct
 
         return 0; // No discount
     }
-
-    /**
-     * Check if the current product is in the customer's wishlist
-     *
-     * @return bool
-     */
-    public function isWishlist($product)
-    {
-        $wishlist = $this->_objectManager->get(\Magento\Wishlist\Model\Wishlist::class)->create()->loadByCustomerId($this->_customerSession->getCustomerId(), true);
-        $wishlistProduct = $wishlist->getItemCollection()->addFieldToFilter('product_id', $product->getId())->getFirstItem();
-
-        return $wishlistProduct && $wishlistProduct->getId();
-    }
-    public function getcustomerId()
-    {
-        $om = \Magento\Framework\App\ObjectManager::getInstance();
-        $customerSession = $om->get('Magento\Customer\Model\Session');
-       $customerId=$customerSession->getCustomer()->getId();
-       return $customerId;
-    }
 }

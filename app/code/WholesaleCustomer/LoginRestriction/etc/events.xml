@@ -15,6 +15,7 @@
         <observer name="block_customer" instance="WholesaleCustomer\LoginRestriction\Observer\CustomerRegister" />
     </event>
     <event name="customer_save_after">
-        <observer name="wholesale_customer_log_values" instance="WholesaleCustomer\LoginRestriction\Observer\AdminhtmlCustomerSaveAfterObserver" />
+        <observer name="wholesale_customer_log_values" 
+        instance="WholesaleCustomer\LoginRestriction\Observer\AdminhtmlCustomerSaveAfterObserver" />
     </event>
 </config>

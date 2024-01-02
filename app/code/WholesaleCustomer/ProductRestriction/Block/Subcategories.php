@@ -1,4 +1,5 @@
 <?php
+
 namespace WholesaleCustomer\ProductRestriction\Block;
 
 use Magento\Catalog\Model\CategoryFactory;
@@ -6,8 +7,15 @@ use Magento\Framework\View\Element\Template;
 
 class Subcategories extends Template
 {
+    /**
+     * @var CategoryFactory
+     */
     protected $categoryFactory;
-
+    /**
+     * @param Template\Context $context
+     * @param CategoryFactory $categoryFactory
+     * @param array $data
+     */
     public function __construct(
         Template\Context $context,
         CategoryFactory $categoryFactory,
@@ -16,7 +24,11 @@ class Subcategories extends Template
         $this->categoryFactory = $categoryFactory;
         parent::__construct($context, $data);
     }
-
+    /**
+     * Retrieve the discount percentage for the current product
+     *
+     * @return array
+     */
     public function getCategories()
     {
         $collection = $this->categoryFactory->create()->getCollection()
@@ -25,7 +37,12 @@ class Subcategories extends Template
 
         return $collection;
     }
-
+    /**
+     * Retrieve the discount percentage for the current product
+     *
+     * @return array
+     * @param int $categoryId
+     */
     public function getSubcategories($categoryId)
     {
         $category = $this->categoryFactory->create()->load($categoryId);

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -13,9 +14,9 @@ namespace WholesaleCustomer\ProductRestriction\Block;
  */
 interface ReviewRendererInterface
 {
-    const SHORT_VIEW = 'short';
-    const FULL_VIEW = 'default';
-    const DEFAULT_VIEW = self::FULL_VIEW;
+    public const SHORT_VIEW = 'short';
+    public const FULL_VIEW = 'default';
+    public const DEFAULT_VIEW = self::FULL_VIEW;
 
     /**
      * Get product review summary html

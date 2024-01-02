@@ -1,0 +1,12 @@
+@font-face {
+    font-family: 'Lato';
+    src: url('@{baseDir}fonts/lato-regular.woff2') format('woff2'),
+         url('@{baseDir}fonts/lato-regular.woff') format('woff'),
+         url('@{baseDir}fonts/lato-regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+body {
+    font-family: 'Lato', sans-serif;
+}

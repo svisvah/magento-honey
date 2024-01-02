@@ -1,18 +1,12 @@
 <?php
+
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace WholesaleCustomer\ProductRestriction\Block;
 
-/**
- * Class AbstractProduct
- * @api
- * @deprecated 102.0.0
- * @SuppressWarnings(PHPMD.NumberOfChildren)
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 100.0.2
- */
 class AbstractProduct extends \Magento\Framework\View\Element\Template
 {
     /**
@@ -42,21 +36,21 @@ class AbstractProduct extends \Magento\Framework\View\Element\Template
     protected $_columnCountLayoutDepend = [];
 
     /**
-     * Core registry
+     * Core registry from Magento\Framework
      *
      * @var \Magento\Framework\Registry
      */
     protected $_coreRegistry;
 
     /**
-     * Tax data
+     * Tax data from Magento\Tax\Helper
      *
      * @var \Magento\Tax\Helper\Data
      */
     protected $_taxData;
 
     /**
-     * Catalog config
+     * Catalog config from Magento\Catalog\Model
      *
      * @var \Magento\Catalog\Model\Config
      */
@@ -251,7 +245,6 @@ class AbstractProduct extends \Magento\Framework\View\Element\Template
             ->addTaxPercents()
             ->addAttributeToSelect($this->_catalogConfig->getProductAttributes())
             ->addUrlRewrite();
-            
     }
 
     /**

@@ -13,10 +13,12 @@ xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xs
             xsi:type="object">Magento\Framework\App\Response\RedirectInterface</argument>
         </arguments>
     </type>
-    <!-- <type name="Magento\Catalog\Block\Product\ProductList\Toolbar">
+
+    <type name="Magento\Catalog\Block\Product\ProductList\Toolbar">
         <plugin name="vendor_restrictions_toolbar_plugin" 
         type="WholesaleCustomer\ProductRestriction\Plugin\ToolbarPlugin" sortOrder="1" />
-    </type> -->
+    </type>
+    
     <preference for="Magento\CatalogWidget\Block\Product\ProductsList" 
     type="WholesaleCustomer\ProductRestriction\Block\ProductsList" />
     <preference for="Magento\Catalog\Block\Product\Widget\NewWidget" 
@@ -25,5 +27,4 @@ xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xs
     type="WholesaleCustomer\ProductRestriction\Block\Discount" />
     <preference for="Magento\Catalog\Block\Product\ListProduct" 
     type="WholesaleCustomer\ProductRestriction\Block\ListProducts" />
-  
 </config>

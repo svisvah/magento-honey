@@ -1,8 +1,10 @@
 <?php
+
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 declare(strict_types=1);
 
 namespace WholesaleCustomer\ProductRestriction\Block;
@@ -45,14 +47,14 @@ class ListProducts extends AbstractProduct implements IdentityInterface
     protected $_defaultToolbarBlock = Toolbar::class;
 
     /**
-     * Product Collection
+     * Product Collection AbstractCollection
      *
      * @var AbstractCollection
      */
     protected $_productCollection;
 
     /**
-     * Catalog layer
+     * Catalog layer CatalogLayer
      *
      * @var Layer
      */
@@ -73,6 +75,9 @@ class ListProducts extends AbstractProduct implements IdentityInterface
      */
     protected $categoryRepository;
 
+    /**
+     * @var CustomerSession
+     */
     protected $customerSession;
 
     /**
@@ -80,6 +85,7 @@ class ListProducts extends AbstractProduct implements IdentityInterface
      * @param PostHelper $postDataHelper
      * @param Resolver $layerResolver
      * @param CategoryRepositoryInterface $categoryRepository
+     * @param CustomerSession $customerSession
      * @param Data $urlHelper
      * @param array $data
      * @param OutputHelper|null $outputHelper
@@ -198,46 +204,32 @@ class ListProducts extends AbstractProduct implements IdentityInterface
     protected function _beforeToHtml()
     {
         $collection = $this->_getProductCollection();
-        
-            $customerGroupId = $this->customerSession->getCustomerGroupId();
-    
-           
-            $customerGroupId = ($customerGroupId) ? $customerGroupId : 0;
-    
-            
-            if ($customerGroupId != 2) {
-                
-                $collection->addAttributeToFilter('wholesale_visibility', ['neq' => 1]);
-            }
-        
-    
+
+        $customerGroupId = $this->customerSession->getCustomerGroupId();
+        $customerGroupId = ($customerGroupId) ? $customerGroupId : 0;
+        if ($customerGroupId != 2) {
+            $collection->addAttributeToFilter('wholesale_visibility', ['neq' => 1]);
+        }
         $this->addToolbarBlock($collection);
-    
         if (!$collection->isLoaded()) {
             $collection->load();
         }
-    
+
         $categoryId = $this->getLayer()->getCurrentCategory()->getId();
-    
+
         if ($categoryId) {
             foreach ($collection as $product) {
                 $product->setData('category_id', $categoryId);
             }
         }
-    
-        // Your custom logic to modify the product collection
-       
-    
+        // Your custom logic to modify the product collectio
         return parent::_beforeToHtml();
     }
-    
     /**
      * Custom function to filter the product collection based on customer group and other criteria
      *
      * @param Collection $collection
      */
-
-
     /**
      * Add toolbar block from product listing layout
      *
@@ -538,6 +530,7 @@ class ListProducts extends AbstractProduct implements IdentityInterface
     private function configureToolbar(Toolbar $toolbar, Collection $collection)
     {
         // use sortable parameters
+
         $orders = $this->getAvailableOrders();
         if ($orders) {
             $toolbar->setAvailableOrders($orders);
@@ -558,6 +551,11 @@ class ListProducts extends AbstractProduct implements IdentityInterface
         $toolbar->setCollection($collection);
         $this->setChild('toolbar', $toolbar);
     }
+    /**
+     * Retrieve the discount percentage for the current product
+     *
+     * @return float
+     */
     public function getDiscountPercentage()
     {
         $product = $this->getProduct();
