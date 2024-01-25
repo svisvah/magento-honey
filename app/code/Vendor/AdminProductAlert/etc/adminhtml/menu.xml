@@ -10,7 +10,7 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
     <menu>
-        <add id="Vendor_AdminProductAlert::manager" title="Out of Stock" module="Vendor_AdminProductAlert" sortOrder="10" resource="Vendor_AdminProductAlert::manager" />
-        <add id="Vendor_AdminProductAlert::add_row" title="Out of Stock Notification" module="Vendor_AdminProductAlert" sortOrder="20" parent="Vendor_AdminProductAlert::manager" action="stock/grid" resource="Vendor_AdminProductAlert::add_row"/>
+        <add id="Vendor_AdminProductAlert::manager" title="Out of Stock" module="Vendor_AdminProductAlert" sortOrder="350" resource="Vendor_AdminProductAlert::manager" />
+        <add id="Vendor_AdminProductAlert::add_row" title="Out of Stock Notification" module="Vendor_AdminProductAlert" sortOrder="450" parent="Vendor_AdminProductAlert::manager" action="stock/grid" resource="Vendor_AdminProductAlert::add_row"/>
     </menu>
 </config>

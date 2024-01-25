@@ -9,6 +9,7 @@ use Magento\Store\Model\ScopeInterface;
 use Magento\Customer\Model\CustomerFactory;
 use Magento\Framework\Stdlib\DateTime\DateTime;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
+use Magento\Store\Model\StoreManagerInterface;
 
 class SendWholesaleCustomerEmail
 {
@@ -42,6 +43,8 @@ class SendWholesaleCustomerEmail
      */
     protected $timezone;
 
+    protected $storeManager;
+
     /**
      * SendWholesaleCustomerEmail constructor.
      *
@@ -58,7 +61,8 @@ class SendWholesaleCustomerEmail
         ScopeConfigInterface $scopeConfig,
         CustomerFactory $customerFactory,
         DateTime $dateTime,
-        TimezoneInterface $timezone
+        TimezoneInterface $timezone,
+        StoreManagerInterface $storeManager
     ) {
         $this->transportBuilder = $transportBuilder;
         $this->inlineTranslation = $inlineTranslation;
@@ -66,6 +70,7 @@ class SendWholesaleCustomerEmail
         $this->customerFactory = $customerFactory;
         $this->dateTime = $dateTime;
         $this->timezone = $timezone;
+        $this->storeManager = $storeManager; 
     }
 
     /**
@@ -87,6 +92,7 @@ class SendWholesaleCustomerEmail
                 <th>Customer ID</th>
                 <th>Customer Name</th>
                 <th>Customer Email</th>
+                <th>Approve</th>
             </tr>';
 
         foreach ($customerCollection as $customer) {
@@ -98,12 +104,21 @@ class SendWholesaleCustomerEmail
                 $customerModel->getData('approve_as_wholesale_customer') == 0 &&
                 strtotime($customerModel->getData('created_at')) <= $twoDaysAgoTimestamp
             ) {
-                $tableHtml .= '<tr>
-                    <td>' . $customer->getId() . '</td>
-                    <td>' . $customer->getName() . '</td>
-                    <td>' . $customer->getEmail() . '</td>
-                </tr>';
+                $storeUrl = $this->storeManager->getStore()->getBaseUrl();
+            $apiUrl =  $this->scopeConfig->getValue('custom_section/approval_by_api_section/approval_api');
+            $approvalbyAPIUrl = $storeUrl . "" . $apiUrl;
+            $approvalUrlByAPI= $approvalbyAPIUrl."".$customer->getId();
+            $buttonHtml = '<a href="' . $approvalUrlByAPI . '"><button>Approve</button></a>';
+            // $buttonHTML='<a href='.$approvalUrlByAPI.
+
+                $tableHtml .= '<tr>'
+                    . '<td>' . $customer->getId() . '</td>'
+                    . '<td>' . $customer->getName() . '</td>'
+                    . '<td>' . $customer->getEmail() . '</td>'
+                    . '<td>' . $buttonHtml . '</td>' // Add the button column
+                    . '</tr>';
             }
+                
         }
 
         $tableHtml .= '</table>';

@@ -69,6 +69,18 @@ xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file
         <source_model>WholesaleCustomer\LoginRestriction\Model\Config\Source\Email\Template</source_model>
     </field>
 </group>
+
+
+<group id="approval_by_api_section" translate="label" type="text" 
+    sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+    <label>Wholesale Customer Approval By API</label>
+     <field id="approval_api" translate="label" 
+                type="text" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>API Approval URL</label>
+                </field>
+    
+</group>
+
         </section>
     </system>
 </config>

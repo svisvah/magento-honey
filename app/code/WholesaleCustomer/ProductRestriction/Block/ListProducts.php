@@ -80,6 +80,8 @@ class ListProducts extends AbstractProduct implements IdentityInterface
      */
     protected $customerSession;
 
+    protected $eavConfig;
+
     /**
      * @param Context $context
      * @param PostHelper $postDataHelper
@@ -96,14 +98,16 @@ class ListProducts extends AbstractProduct implements IdentityInterface
         Resolver $layerResolver,
         CategoryRepositoryInterface $categoryRepository,
         CustomerSession $customerSession,
+        \Magento\Eav\Model\Config $eavConfig,
         Data $urlHelper,
         array $data = [],
-        ?OutputHelper $outputHelper = null
+        OutputHelper $outputHelper = null
     ) {
         $this->_catalogLayer = $layerResolver->get();
         $this->_postDataHelper = $postDataHelper;
         $this->categoryRepository = $categoryRepository;
         $this->customerSession = $customerSession;
+        $this->_eavConfig = $eavConfig;
         $this->urlHelper = $urlHelper;
         $data['outputHelper'] = $outputHelper ?? ObjectManager::getInstance()->get(OutputHelper::class);
         parent::__construct(
@@ -204,11 +208,42 @@ class ListProducts extends AbstractProduct implements IdentityInterface
     protected function _beforeToHtml()
     {
         $collection = $this->_getProductCollection();
+        $attributeCode = "honey_product_type";
+        $attribute = $this->_eavConfig->getAttribute('catalog_product', $attributeCode);
+        $options = $attribute->getSource()->getAllOptions();
+        $wholesale=$retail=$all=0;
+
+        foreach ($options as $option) {
+            if ($option['value'] > 0) {
+                if($option['label']=="Wholesale")
+                {
+                    $wholesale=$option['value'];
+                }
+                elseif($option['label']=="Retail")
+                {
+                    $retail=$option['value'];
+                }
+                else
+                {
+                    $all=$option['value'];
+                }
+
+            }
+        }
+
+
+
 
         $customerGroupId = $this->customerSession->getCustomerGroupId();
         $customerGroupId = ($customerGroupId) ? $customerGroupId : 0;
-        if ($customerGroupId != 2) {
-            $collection->addAttributeToFilter('wholesale_visibility', ['neq' => 1]);
+        if ($customerGroupId == 2) {
+
+            $collection->addAttributeToFilter('honey_product_type', ['neq' => $retail]);
+        }
+        else
+        {
+            $collection->addAttributeToFilter('honey_product_type', ['neq' => $wholesale]);
+
         }
         $this->addToolbarBlock($collection);
         if (!$collection->isLoaded()) {

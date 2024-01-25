@@ -25,7 +25,6 @@ h6 {
     font-family: 'Lato' !important;
 
 }
-
 body {
     background: white !important;
 }
@@ -43,13 +42,13 @@ html body .price-box .old-price .price,
 html body .price-box .discounted-price .price,
 html body .discounted-price .price {
     text-decoration: line-through !important;
-    margin-right: 5px !important;
+    
 }
 
 html body .product-info-main .product-info-price .old-price .price-wrapper .price {
     font-size: 28px !important;
     font-weight: 300 !important;
-    margin-right: 20px !important;
+    
 }
 
 html body .product-info-main .product-info-price .price-box {
@@ -107,27 +106,11 @@ html body .page-header .block-search {
     /* Adjust the width as needed */
 }
 
-html body .navigation {
-    background-color: white !important;
-}
 
 html body .logo {
     padding-right: 30px !important;
 }
 
-html body .navigation .level0.parent>.level-top:before {
-
-    content: url('../image/header_images/categories.svg') !important;
-    position: relative !important;
-    top: 5px !important;
-    left: -5px !important;
-    color: #0d0d0e !important;
-}
-
-html body .navigation .level0.parent>.level-top {
-
-    line-height: 35px !important;
-}
 
 
 @media only screen and (min-width: 1075px) {
@@ -164,6 +147,9 @@ html body .navigation .level0.parent>.level-top {
     html body .page-header .block-search button.action.search {
         width: 18% !important;
     }
+    html body .searchsuite-autocomplete {
+        width:90% !important;
+    }
 }
 
 @media only screen and (max-width: 976px) and (min-width:854px) {
@@ -187,11 +173,14 @@ html body .navigation .level0.parent>.level-top {
         line-height: 35px !important;
         margin-left: -32px !important;
     }
+    html body .searchsuite-autocomplete {
+        width:90% !important;
+    }
 }
 
 @media only screen and (max-width: 854px) and (min-width:795px) {
     html body .page-header .block-search {
-        width: 30% !important;
+        width: 40% !important;
         float: right !important;
     }
 
@@ -209,12 +198,15 @@ html body .navigation .level0.parent>.level-top {
     html body .navigation .level0.parent>.level-top {
         line-height: 35px !important;
         margin-left: -32px !important;
+    }
+    html body .searchsuite-autocomplete {
+        width:90% !important;
     }
 }
 
 @media only screen and (max-width:794px) and (min-width:769px) {
     html body .page-header .block-search {
-        width: 25% !important;
+        width: 40% !important;
         float: right !important;
     }
 
@@ -232,6 +224,9 @@ html body .navigation .level0.parent>.level-top {
     html body .navigation .level0.parent>.level-top {
         line-height: 35px !important;
         margin-left: -32px !important;
+    }
+    html body .searchsuite-autocomplete {
+        width:90% !important;
     }
 }
 
@@ -246,6 +241,9 @@ html body .navigation .level0.parent>.level-top {
 
     html body .page-header .block-search {
         width: unset !important;
+    }
+    html body .searchsuite-autocomplete {
+        width:95% !important;
     }
 }
 
@@ -332,11 +330,6 @@ html body .minicart-wrapper {
     display: flex !important;
 }
 
-html body a:visited,
-.alink:visited {
-    color: #000000 !important;
-    text-decoration: none !important;
-}
 
 html body .logo {
     margin: -16px auto 11px 0 !important;
@@ -470,10 +463,10 @@ html body .minicart-wrapper {
     margin-top: unset !important;
 }
 
-html body .reviews-actions {
+.product-item .reviews-actions {
 
     display: none !important;
-}
+} 
 
 html body .product-item-name {
     width: 100% !important;
@@ -539,7 +532,7 @@ html body .block.widget .product-item-info {
 }
 
 html body .old-price {
-    margin-right: 15px !important;
+    margin-right: 2px !important;
 }
 
 
@@ -551,45 +544,16 @@ html body .actions-primary {
     width: 100% !important;
 }
 
-html body .product-reviews-summary {
+.product-item .product-reviews-summary {
     position: absolute !important;
     top: -25px !important;
-}
+} 
 
 html body .product-item-details {
     position: relative !important;
     padding: 5px 15px !important;
 }
 
-@media only screen and (min-width:769px) {
-    html body .category-dropdown {
-        display: block !important;
-    }
-
-    html body .sections.nav-sections {
-        display: none !important;
-    }
-
-}
-
-@media only screen and (max-width:768px) {
-    html body .category-dropdown {
-        display: none !important;
-    }
-
-    html body .sections.nav-sections {
-        display: block !important;
-    }
-
-    html body .navigation .level0.parent>.level-top:before {
-        content: url('../image/header_images/categories.svg') !important;
-        position: relative !important;
-        top: 5px !important;
-        left: -11px !important;
-        color: #0d0d0e !important;
-    }
-
-}
 
 html body .action.primary,
 html body .action-primary {
@@ -667,6 +631,7 @@ html body .abs-actions-addto:before,
         align-content: center;
         justify-content: flex-start;
         align-items: center;
+        flex-wrap: wrap;
     }
 }
 
@@ -875,9 +840,7 @@ html body .social-buttons .social-icon.google-plus:hover {
     color: #d64c3f
 }
 
-html body .sections.nav-sections {
-    display: none;
-}
+
 
 html body .block.widget .product-item-info {
     width: auto;
@@ -960,11 +923,7 @@ html body .footer-row {
         line-height: 1.6 !important;
     }
 
-    html body .footer-row {
-
-        padding-left: 85px;
-
-    }
+   
 }
 
 html body label.cart-label {
@@ -1113,37 +1072,12 @@ html body .header-category-title:before {
         speak: none !important;
         text-align: center !important;
         position: relative !important;
-        top: -26px !important;
-        left: -48px !important;
+        top: -25px !important;
+        left: -45px !important;
     }
 }
 
-/* Display the "Menu" tab and its content by default */
-.sections.nav-sections .section-item-content#store\\.menu,
-.sections.nav-sections .section-item-title.active[data-collapsible="true"] {
-    display: block !important;
-}
 
-/* Display the navigation links in the "Menu" tab by default */
-.sections.nav-sections .section-item-content#store\\.menu .navigation {
-    display: block !important;
-}
-
-/* Hide the navigation links in the "Account" tab */
-.sections.nav-sections .section-item-content#store\\.links .navigation {
-    display: none !important;
-}
-
-/* Display the "Account" tab by default */
-.sections.nav-sections .section-item-content#store\\.links,
-.sections.nav-sections .section-item-title[data-collapsible="true"] {
-    display: block !important;
-}
-
-/* Display the account links in the "Account" tab by default */
-.sections.nav-sections .section-item-content#store\\.links .customer-menu {
-    display: block !important;
-}
 
 .minicart-items .product-item-details {
     padding-left: 88px !important;
@@ -1152,18 +1086,17 @@ html body .header-category-title:before {
 .profile-login {
     display: inline-flex;
     align-items: center;
-    gap: 10px;
+    gap: 0px !important;
     cursor: pointer;
 }
 
-img#login-id-image {
-    width: 20px;
-    height: 20px;
-
-}
 
 .product-item .price-box {
     margin: 10px 0px 25px !important;
+    vertical-align: middle;
+    min-height:33px
+
+
 }
 
 .minicart-wrapper .product .actions {
@@ -1366,4 +1299,142 @@ html body .wholesale-color {
         top: 0px !important;
         left: 0px !important;
     }
+}
+img#login-id-image {
+    width: 25px !important;
+    height: 25px !important;
+}
+.account-links {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: -20px;
+    background-color: #fff; /* Add your desired background color */
+    border: 1px solid #ccc; /* Add your desired border color */
+    padding: 10px;
+    z-index: 999;
+    list-style: none; /* Remove list-style dots */
+    margin: 0; /* Remove default margin */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Add a subtle box shadow */
+    width: 300px !important; /* Set your desired width */
+}
+
+.header__icons.my_acc {
+    text-decoration: none; /* Remove underline for the link */
+    position: relative; /* Add relative positioning to create a stacking context */
+}
+
+.header__icons.my_acc:hover .account-links,
+.account-links:hover {
+    display: block;
+}
+
+.account-links a {
+    text-decoration: none; /* Remove underline for the links inside the dropdown */
+    color: #333; /* Add your desired text color */
+    display: block;
+    margin-bottom: 8px;
+}
+.login-dropdown-design {
+border-radius: 50%;
+width: 10px;
+height: 10px;
+padding: 7px;
+background: #fff;
+border: 2px solid #666;
+color: #666;
+text-align: center;
+line-height: 5px;
+}
+.login-dropdown-container {
+display: flex;
+align-items: center;
+border-bottom: 1px solid #575757 !important;
+gap:10px;
+margin-bottom: 20px;
+padding-bottom: 10px 
+}
+ol.product-items li.product-item .stock.unavailable {
+    text-align: center;
+    background: black;
+    color: white;
+    font-weight: bold;
+    padding-right: unset !important;
+}
+
+.box-tocart .field.qty .control {
+    display: flex;
+}
+
+li.item.product.product-item.outofstock .product-opacity, li.item.product.product-item.outofstock .list-discount-percentage, li.item.product.product-item.outofstock .add-to-links, .product-item-info.outofstock .product-opacity,
+.product-item-info.outofstock .list-discount-percentage {
+    opacity: 0.5;
+}
+.outofstocklabel {
+    position: absolute;
+    z-index: 21;
+    background-color: black;
+    padding: 8px 10px;
+    color: white;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-weight: bold;
+    opacity: 1;
+    font-size: 13px;
+    width: 75%;
+    text-align: center;
+}
+span.discount-label {
+    color: red;
+    margin-left:2px;
+}
+span.related-discount-label {
+    color: red;
+    margin-left:2px;
+}
+.catalog-product-view span.discount-label {
+    display: none;
+}
+.stock.unavailable {
+    visibility: hidden;
+}
+
+@media only screen and (max-width: 968px) and (min-width:336px) {
+
+    .product-item .price-box {
+        margin: 10px 0px 25px !important;
+        min-height: 33px;
+        vertical-align: middle;
+    }
+    }
+
+    @media only screen and (max-width: 336px) and (min-width:320px){
+        .product-item .price-box {
+            margin: 3px 0px 7px !important;
+            min-height: 52px !important;
+            vertical-align: middle;
+        
+        }
+}
+.searchsuite-autocomplete {
+    background-color: #fff;
+    border: 1px solid #c2c2c2;
+    box-shadow: 0 3px 3px rgba(0, 0, 0, 0.15);
+    left: 15px !important;
+    margin-top: 4px;
+    width: 72% !important;
+    position: absolute;
+    z-index: 9999999;
+}
+
+.owl-item
+{
+    width:100% !important;
+    height:auto;
+  
+}
+.owl-stage
+{
+    width:100% !important;
 }

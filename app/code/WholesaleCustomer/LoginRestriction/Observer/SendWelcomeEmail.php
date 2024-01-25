@@ -76,6 +76,7 @@ class SendWelcomeEmail implements ObserverInterface
      */
     public function execute(Observer $observer)
     {
+        $this->logger->info("Email sending...............");
         // Ensure we have a fully loaded customer object
         $customerId = $observer->getEvent()->getCustomer()->getId();
         $customer = $this->customerRepository->getById($customerId);
@@ -91,6 +92,7 @@ class SendWelcomeEmail implements ObserverInterface
             $emailAddresses = array_map('trim', $emailAddresses);
 
             $this->sendWelcomeEmail($customer, $emailAddresses);
+            $this->logger->info("Email sending end...............");
         }
     }
 

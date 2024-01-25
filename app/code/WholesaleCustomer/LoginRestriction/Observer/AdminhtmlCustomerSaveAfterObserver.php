@@ -67,51 +67,76 @@ class AdminhtmlCustomerSaveAfterObserver implements ObserverInterface
      */
     public function execute(Observer $observer)
     {
+        $this->logger->info("Api working testing testing");
         $customer = $observer->getCustomer();
         $customerId = $customer->getId();
         $enableLog = $this->scopeConfig->getValue('custom_section/approve_log_group/enable_approve_log');
 
-        if ($customer->getOrigData('approve_as_wholesale_customer') != $customer->
-        getData('approve_as_wholesale_customer')) {
+        if (
+            $customer->getOrigData('approve_as_wholesale_customer') != $customer->getData('approve_as_wholesale_customer')
+        ) {
             // Get the currently logged-in admin's user ID
-            $adminUserId = $this->authSession->getUser()->getId();
+            if ($this->authSession->getUser() != null) {
 
-            if ($enableLog == 1 || $enableLog == 'Yes') {
-                if ($adminUserId) {
-                    $adminUser = $this->authSession->getUser();
+                $adminUserId = $this->authSession->getUser()->getId();
 
-                    // Get admin data
-                    $adminName = $adminUser->getUsername();
-                    $adminEmail = $adminUser->getEmail();
-                    $adminRole = $adminUser->getRole();
-                    $adminRoleName = $adminRole->getRoleName();
+                if ($enableLog == 1 || $enableLog == 'Yes') {
+                    if ($adminUserId) {
+                        $adminUser = $this->authSession->getUser();
 
-                    // Get customer data
-                    $customerName = $customer->getName();
-                    $customerEmail = $customer->getEmail();
+                        // Get admin data
+                        $adminName = $adminUser->getUsername();
+                        $adminEmail = $adminUser->getEmail();
+                        $adminRole = $adminUser->getRole();
+                        $adminRoleName = $adminRole->getRoleName();
 
-                    // Get approval time
-                    $approvalTime = $this->dateTime->gmtDate();
+                        // Get customer data
+                        $customerName = $customer->getName();
+                        $customerEmail = $customer->getEmail();
 
-                    // Log values for verification
-                    $this->logger->info("Admin Name: $adminName");
-                    $this->logger->info("Admin Email: $adminEmail");
-                    $this->logger->info("Admin Role: $adminRoleName");
-                    $this->logger->info("Customer Name: $customerName");
-                    $this->logger->info("Customer Email: $customerEmail");
-                    $this->logger->info("Approval Time: $approvalTime");
+                        // Get approval time
+                        $approvalTime = $this->dateTime->gmtDate();
 
-                    // Save data to custom table using factory
-                    $gridModel = $this->gridFactory->create();
-                    $gridModel->setAdminName($adminName)
-                        ->setAdminEmail($adminEmail)
-                        ->setAdminRole($adminRoleName)
-                        ->setCustomerName($customerName)
-                        ->setCustomerEmail($customerEmail)
-                        ->setApprovedTime($approvalTime)
-                        ->save();
+                        // Log values for verification
+                        $this->logger->info("Admin Name: $adminName");
+                        $this->logger->info("Admin Email: $adminEmail");
+                        $this->logger->info("Admin Role: $adminRoleName");
+                        $this->logger->info("Customer Name: $customerName");
+                        $this->logger->info("Customer Email: $customerEmail");
+                        $this->logger->info("Approval Time: $approvalTime");
+
+                        // Save data to custom table using factory
+                        $gridModel = $this->gridFactory->create();
+                        $gridModel->setAdminName($adminName)
+                            ->setAdminEmail($adminEmail)
+                            ->setAdminRole($adminRoleName)
+                            ->setCustomerName($customerName)
+                            ->setCustomerEmail($customerEmail)
+                            ->setApprovedTime($approvalTime)
+                            ->save();
+                    }
                 }
+            } else {
+                $adminName = "Updated by Approve API";
+                $adminEmail = "";
+                $adminRole = "";
+                $adminRoleName = "";
+                $customerName = "api";
+                $customerEmail = "api";
+                $approvalTime = $this->dateTime->gmtDate();
+
+
+
+                $gridModel = $this->gridFactory->create();
+                $gridModel->setAdminName($adminName)
+                    ->setAdminEmail($adminEmail)
+                    ->setAdminRole($adminRoleName)
+                    ->setCustomerName($customerName)
+                    ->setCustomerEmail($customerEmail)
+                    ->setApprovedTime($approvalTime)
+                    ->save();
             }
         }
+        $this->logger->info("Api working testing testing end");
     }
 }

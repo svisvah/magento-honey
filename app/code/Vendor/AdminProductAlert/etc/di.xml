@@ -1,39 +1,29 @@
 <?xml version="1.0"?>
 <!--
-/** Grid di xml
- * @category  Vendor
- * @package   Vendor_Grid
- * @author    Vendor
- * @copyright Copyright (c) 2010-2017 Vendor Software Private Limited (https://Vendor.com)
- * @license   https://store.Vendor.com/license.html
- */
--->
+    /**
+     * Vendor Grid DI
+     *
+     * @category    Vendor
+     * @package     Vendor_Grid
+     * @author      Vendor Software Private Limited
+     *
+     */
+ -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
-    <preference for="Vendor\AdminProductAlert\Api\Data\GridInterface" type="Vendor\AdminProductAlert\Model\Grid" />
-
-    <virtualType name="Vendor\AdminProductAlert\Model\ResourceModel\Grid\Grid\Collection" type="Magento\Framework\View\Element\UiComponent\DataProvider\SearchResult">
+    <!-- here we remove virtualType and defile collection as follow-->
+    <type name="Vendor\AdminProductAlert\Model\ResourceModel\Grid\Grid\Collection">
         <arguments>
             <argument name="mainTable" xsi:type="string">product_alert_stock</argument>
+            <argument name="eventPrefix" xsi:type="string">product_alert_stock_collection</argument>
+            <argument name="eventObject" xsi:type="string">product_alert_stock_collection</argument>
             <argument name="resourceModel" xsi:type="string">Vendor\AdminProductAlert\Model\ResourceModel\Grid</argument>
         </arguments>
-    </virtualType>
+    </type>
     <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
         <arguments>
             <argument name="collections" xsi:type="array">
+                <!--data provider name which used in grid ui component file -->
                 <item name="stock_record_grid_list_data_source" xsi:type="string">Vendor\AdminProductAlert\Model\ResourceModel\Grid\Grid\Collection</item>
-            </argument>
-        </arguments>
-    </type>
-    <type name="Vendor\AdminProductAlert\Logger\Handler">
-        <arguments>
-            <argument name="filesystem" xsi:type="object">Magento\Framework\Filesystem\Driver\File</argument>
-        </arguments>
-    </type>
-    <type name="Vendor\AdminProductAlert\Logger\Logger">
-        <arguments>
-            <argument name="name" xsi:type="string">customLogHandler</argument>
-            <argument name="handlers"  xsi:type="array">
-                <item name="system" xsi:type="object">Vendor\AdminProductAlert\Logger\Handler</item>
             </argument>
         </arguments>
     </type>

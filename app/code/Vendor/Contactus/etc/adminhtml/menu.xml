@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
+    <menu>
+        <add id="Vendor_Contactus::base" title="Contact Us" module="Vendor_Contactus" sortOrder="30" resource="Vendor_Contactus::contactus"/>
+        <add id="Vendor_Contactus::manage_mlcontactus" title="Contact Us Info" module="Vendor_Contactus" sortOrder="45" parent="Vendor_Contactus::base" action="mladmincontactus/contactus" resource="Vendor_Contactus::manage_mlcontactus"/>
+    </menu>
+</config>

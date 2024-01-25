@@ -1,29 +1,31 @@
-<?php
-$categoryId = 6; // Change this to the ID of your desired category
+<div class="shopbycategories">
+    <?php
+    $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+    $categoryFactory = $objectManager->get('\Magento\Catalog\Model\ResourceModel\Category\CollectionFactory');
+    
+    $allCategories = $categoryFactory->create();
+    $allCategories->addAttributeToSelect(['name', 'image']); // Add more attributes if needed
+    $allCategories->addAttributeToFilter('is_active', 1); // Filter only enabled categories
+    ?>
 
-/** @var \Magento\Catalog\Model\ResourceModel\Category\Collection $subcategories */
-$subcategories = $block->getSubcategories($categoryId);
-$subcategories->addAttributeToSelect(['name', 'image']); // Add image attribute
-
-?>
-<?php if ($subcategories->count() > 0): ?>
-    <h2 class="category-title">Categories</h2>
-    <ul class="category-block">
-        <?php foreach ($subcategories as $subcategory) : ?>
-            <li class="item">
-                <a href="<?= $subcategory->getUrl() ?>">
-                    <?php if ($subcategory->getImage()) : ?>
-                        <?php
-                        $imagePath =  $subcategory->getImage();
-                        ?>
-                        <img class="categpory-image" src="<?= $imagePath ?>"
-                         alt="<?= $block->escapeHtml($subcategory->getName())?>">
-                    <?php endif; ?>
-                </a>
-                <p class="category-name"><?= $block->escapeHtml($subcategory->getName()) ?></p>
-            </li>
-        <?php endforeach; ?>
-    </ul>
-<?php else : ?>
-    <p>No subcategories found.</p>
-<?php endif; ?>
+    <?php if ($allCategories->count() > 0) : ?>
+        <h2 class="category-title">Categories</h2>
+        <ul class="category-block">
+            <?php foreach ($allCategories as $category) : ?>
+                <li class="item">
+                    <a href="<?= $category->getUrl() ?>">
+                        <?php if ($category->getImage()) : ?>
+                            <?php
+                            $imagePath = $category->getImage();
+                            ?>
+                            <img class="categpory-image" src="<?= $imagePath ?>" alt="<?= $block->escapeHtml($category->getName()) ?>">
+                        <?php endif; ?>
+                    </a>
+                    <p class="category-name"><?= $block->escapeHtml($category->getName()) ?></p>
+                </li>
+            <?php endforeach; ?>
+        </ul>
+    <?php else : ?>
+        <p>No categories found.</p>
+    <?php endif; ?>
+</div>

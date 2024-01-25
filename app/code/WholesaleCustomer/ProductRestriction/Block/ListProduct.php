@@ -75,6 +75,8 @@ class ListProduct extends AbstractProduct implements IdentityInterface
 
     protected $customerSession;
 
+    protected $eavConfig;
+
     /**
      * @param Context $context
      * @param PostHelper $postDataHelper
@@ -90,6 +92,7 @@ class ListProduct extends AbstractProduct implements IdentityInterface
         Resolver $layerResolver,
         CategoryRepositoryInterface $categoryRepository,
         CustomerSession $customerSession,
+        \Magento\Eav\Model\Config $eavConfig,
         Data $urlHelper,
         array $data = [],
         ?OutputHelper $outputHelper = null
@@ -98,6 +101,7 @@ class ListProduct extends AbstractProduct implements IdentityInterface
         $this->_postDataHelper = $postDataHelper;
         $this->categoryRepository = $categoryRepository;
         $this->customerSession = $customerSession;
+        $this->_eavConfig = $eavConfig;
         $this->urlHelper = $urlHelper;
         $data['outputHelper'] = $outputHelper ?? ObjectManager::getInstance()->get(OutputHelper::class);
         parent::__construct(
@@ -226,6 +230,28 @@ class ListProduct extends AbstractProduct implements IdentityInterface
      */
     private function filterProductCollection(Collection $collection)
     {
+        $attributeCode = "honey_product_type";
+        $attribute = $this->_eavConfig->getAttribute('catalog_product', $attributeCode);
+        $options = $attribute->getSource()->getAllOptions();
+        $wholesale=$retail=$all=0;
+
+        foreach ($options as $option) {
+            if ($option['value'] > 0) {
+                if($option['label']=="Wholesale")
+                {
+                    $wholesale=$option['value'];
+                }
+                elseif($option['label']=="Retail")
+                {
+                    $retail=$option['value'];
+                }
+                else
+                {
+                    $all=$option['value'];
+                }
+
+            }
+        }
         // Check if the customer is logged in
         if ($this->customerSession->isLoggedIn()) {
             // Get the customer group ID
@@ -234,11 +260,15 @@ class ListProduct extends AbstractProduct implements IdentityInterface
             // For not-logged-in customers, Magento uses the customer group with ID 0 (NOT LOGGED IN)
             $customerGroupId = ($customerGroupId) ? $customerGroupId : 0;
     
-            // Check customer group and modify the product collection accordingly
-            if ($customerGroupId != 2) {
-                // Add your custom filters here
-                // Example: Exclude products with wholesale_visibility set to 1
-                $collection->addAttributeToFilter('wholesale_visibility', ['neq' => 1]);
+            
+            if ($customerGroupId == 2) {
+
+                $collection->addAttributeToFilter('honey_product_type', ['neq' => $retail]);
+            }
+            else
+            {
+                $collection->addAttributeToFilter('honey_product_type', ['neq' => $wholesale]);
+    
             }
         }
     }

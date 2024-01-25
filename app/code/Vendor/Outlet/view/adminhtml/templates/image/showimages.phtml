@@ -1,0 +1,60 @@
+<!-- app/code/Turiknox/SampleImageUploader/view/adminhtml/templates/image/showimages.phtml -->
+
+<?php
+/** @var \Vendor\Outlet\Block\Adminhtml\Image\Showimages $block */
+
+$images = $block->getImages();
+$description = $block->getDescription();
+$imageid=$block->getImageId();
+?>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        .outlet-container {
+            display: flex;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+
+        .gallery {
+            margin: 5px;
+            border: 1px solid #ccc;
+            width: 20%;
+            box-sizing: border-box;
+            overflow: hidden;
+            float: left;
+        }
+
+        .gallery img {
+            width: 100%;
+            height: auto;
+        }
+
+        .outlet-title {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .outlet-description {
+            clear: both;
+            font-size: 18px;
+        }
+    </style>
+
+    <div class="outlet-title">
+        <h1>Outlet <?php echo $imageid ?></h1>
+    </div>
+
+    <div class="outlet-container">
+        <?php foreach ($images as $index => $image): ?>
+            <div class="gallery">
+                <img src="<?php echo $image; ?>" alt="<?php echo $image; ?>">
+            </div>
+        <?php endforeach; ?> 
+    </div>
+
+    <div class="outlet-description">
+        <?php echo $description; ?>
+    </div>

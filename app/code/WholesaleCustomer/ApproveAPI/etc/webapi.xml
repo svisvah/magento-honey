@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<routes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../app/code/Magento/Webapi/etc/webapi.xsd">
+    <route method="GET" url="/V1/wholesale/customer/approve_api">
+        <service class="WholesaleCustomer\ApproveAPI\Api\ApproveAPIInterface" method="getData" />
+        <resources>
+            <resource ref="anonymous"/>
+        </resources>
+         <!-- <data>
+            <parameter name="customerId" force="true">%customer_id%</parameter>
+        </data> -->
+    </route>
+</routes>

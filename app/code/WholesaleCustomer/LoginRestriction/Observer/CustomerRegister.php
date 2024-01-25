@@ -12,6 +12,7 @@ use Magento\Framework\Message\ManagerInterface as MessageManager;
 use Magento\Customer\Model\ResourceModel\CustomerFactory;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 
+
 class CustomerRegister implements ObserverInterface
 {
     /**
@@ -42,6 +43,8 @@ class CustomerRegister implements ObserverInterface
      * @var ScopeConfigInterface
      */
     protected $scopeConfig;
+
+    protected $encryptor;
     /**
      * Register constructor.
      *
@@ -60,7 +63,8 @@ class CustomerRegister implements ObserverInterface
         StoreManagerInterface $storeManager,
         MessageManager $messageManager,
         CustomerFactory $customerFactory,
-        ScopeConfigInterface $scopeConfig
+        ScopeConfigInterface $scopeConfig,
+        
     ) {
         $this->logger = $logger;
         $this->transportBuilder = $transportBuilder;
@@ -69,6 +73,7 @@ class CustomerRegister implements ObserverInterface
         $this->messageManager = $messageManager;
         $this->customerFactory = $customerFactory;
         $this->scopeConfig = $scopeConfig;
+        
     }
 
     /**
@@ -142,6 +147,7 @@ class CustomerRegister implements ObserverInterface
             $store = $this->storeManager->getStore();
             $storeId = $store->getId();
             $templateId = $this->scopeConfig->getValue('custom_section/custom_group/customer_approve_email');
+
             // echo $templateid;
             // exit();
 
@@ -176,7 +182,16 @@ class CustomerRegister implements ObserverInterface
     protected function sendCustomAdminEmail($toEmail, $customer)
     {
         try {
+            $customerId = $customer->getId();
+           
+
             $store = $this->storeManager->getStore();
+            $storeUrl = $this->storeManager->getStore()->getBaseUrl();
+            $apiUrl =  $this->scopeConfig->getValue('custom_section/approval_by_api_section/approval_api');
+            $approvalbyAPIUrl = $storeUrl . "" . $apiUrl;
+            
+
+
             $storeId = $store->getId();
             $templateId = $this->scopeConfig->getValue('custom_section/custom_group/register_email_to_admin');
             //$templateId = 3; // Replace with the actual ID of your custom email template
@@ -188,6 +203,9 @@ class CustomerRegister implements ObserverInterface
                     'email' => $customer->getEmail(),
                     'name' => $customer->getFirstname() . ' ' . $customer->getLastname(),
                     'password' => 'Password you set when creating account',
+                    'customer_id' => $customerId,
+                    'api_url' => $approvalbyAPIUrl.$customerId
+                    
 
                 ])
                 ->setFrom(['name' => 'Owner', 'email' => 'vishva.eod@gmail.com'])

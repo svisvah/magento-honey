@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <tab id="related" translate="label" sortOrder="10">
+            <label>Related Products</label>
+        </tab>
+        <section id="related_section" translate="label" type="text" sortOrder="10" 
+        showInDefault="1" showInWebsite="1" showInStore="1">
+            <label>Configurations</label>
+            <tab>related</tab>
+            <resource>Vendor_RelatedProducts::config</resource>
+            <group id="related_group" translate="label" type="text" 
+            sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Related Product Configurations</label>
+                 <field id="enable_related_product" translate="label" 
+        type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1" value="1">
+        <label>Enable Related Products</label>
+        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+    </field>
+              <field id="product_limit" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+   <label>Number of products limit</label>     
+   <source_model>Vendor\RelatedProducts\Model\Config\Source\ListMode</source_model>
+</field>
+                <field id="exclude_category" translate="label" type="multiselect" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="20">
+                    <source_model>Vendor\RelatedProducts\Model\Source\Attribute</source_model>
+                    <frontend_model>Vendor\RelatedProducts\Block\Adminhtml\MultiUiSelect</frontend_model>
+                    <can_be_empty>1</can_be_empty>
+                    <label>Exclude categories</label>
+                </field>
+                    
+                
+            </group>
+        </section>
+    </system>
+</config>

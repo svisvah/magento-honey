@@ -1,0 +1,97 @@
+<!-- app/code/Turiknox/SampleImageUploader/view/adminhtml/templates/image/showimages.phtml -->
+
+<?php
+/** @var \Vendor\Outlet\Block\Adminhtml\Image\Showimages $block */
+$outletId = $block->getData('outlet-id');
+$images = $block->getImages($outletId);
+$description = $block->getDescription($outletId);
+
+?>
+
+
+<style>
+    .collection {
+        padding: 2em;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1.5fr));
+        grid-template-rows: 200px;
+        grid-gap: 0.5em;
+        grid-auto-rows: 200px;
+        grid-auto-flow: dense;
+    }
+
+    @media (max-width: 785px) {
+        .collection {
+            padding: 0.5em;
+            grid-gap: 0.25em;
+        }
+    }
+
+    .collection .item {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 5px;
+    }
+
+    .collection .item:nth-of-type(3n) {
+        grid-column: span 2;
+    }
+
+    @media (max-width: 400px) {
+        .collection .item:nth-of-type(3n) {
+            grid-column: span 1;
+        }
+    }
+
+    .collection .item:nth-of-type(4n) {
+        grid-row: span 2;
+    }
+
+    .collection .item img {
+        height: 100%;
+        width: 100%;
+        object-fit: cover;
+        border-radius: 5px;
+    }
+
+    .collection .item img:hover {
+        cursor: pointer;
+    }
+</style>
+
+<div class='collection'>
+    <?php foreach ($images as $index => $image) : ?>
+        <div class="item">
+            <img src="<?php echo $image;  ?>" alt="<?php echo $image; ?>">
+        </div>
+    <?php endforeach; ?>
+</div>
+
+<div class="outlet-description">
+    <?php echo $description;  ?>
+</div>
+
+<!-- <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        var images = document.querySelectorAll('img');
+        const lb = document.getElementById('lightbox');
+        const lb_img = document.getElementById('lightbox_img');
+        if (images) {
+            images.forEach(el => {
+                el.addEventListener('click', () => {
+                    lb_img.src = el.getAttribute('src');
+                    lb.classList.add('is-active');
+                    document.body.classList.add('is-clipped');
+                })
+            })
+        }
+        var close = document.querySelector('.modal-close');
+        if (close) {
+            close.addEventListener('click', () => {
+                lb.classList.remove('is-active');
+                document.body.classList.remove('is-clipped');
+            })
+        }
+    })
+</script> -->

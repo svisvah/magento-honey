@@ -6,7 +6,10 @@
 
 /** @var $block \Magento\Catalog\Block\Product\View */
 ?>
+
 <?php $_product = $block->getProduct(); ?>
+<?php $productid=$block->getProduct()->getId();?>
+<?php $productsku=$block->getProduct()->getSku();?>
 <?php $buttonTitle = __('Add to Cart'); ?>
 <?php if ($_product->isSaleable()) :?>
 <div class="box-tocart">
@@ -30,6 +33,7 @@
                      
             </div>
         </div>
+      
         <?php endif; ?>
         <div class="actions">
             <button type="submit"

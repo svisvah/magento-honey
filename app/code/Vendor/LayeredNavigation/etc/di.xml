@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <type name="Magento\Catalog\Model\Layer\Filter\Item">
+        <plugin name="custom_layered_navigation_filte" type="Vendor\LayeredNavigation\Plugin\CustomLayerFilterItem" sortOrder="1"/>
+    </type>
+</config>
+<!-- 
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <type name="Magento\Catalog\Model\Layer\FilterList">
+        <plugin name="custom_layered_navigation_filter" type="Vendor\LayeredNavigation\Plugin\FilterList" sortOrder="1"/>
+    </type>
+</config> -->

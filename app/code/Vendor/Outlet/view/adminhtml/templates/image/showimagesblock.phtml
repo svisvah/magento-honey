@@ -1,0 +1,19 @@
+<!-- app/code/Turiknox/SampleImageUploader/view/adminhtml/templates/image/showimages_cms.phtml -->
+<?php
+/** @var \Vendor\Outlet\Block\Adminhtml\Image\Showimages $block */
+
+$images = $block->getImages();
+$description = $block->getDescription();
+?>
+<div class="outlet-container">
+    <h1>Outlet 1</h1>
+    <?php foreach ($images as $index => $image): ?>
+        <div class="gallery" style="margin: 5px; border: 1px solid #ccc; float: left; width: 180px;">
+            <img src="<?php echo $image; ?>" alt="<?php echo $image; ?>" style="height: auto; width: 300px;">
+            <br>
+        </div>
+    <?php endforeach; ?> 
+</div>
+<div class="outlet-description">
+    <?php echo $description; ?>
+</div>

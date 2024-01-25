@@ -106,6 +106,7 @@ class ProductsList extends AbstractProduct implements BlockInterface, IdentityIn
 
     protected $customerSession;
 
+    protected $eavConfig;
     /**
      * @var CustomerSession
      */
@@ -166,6 +167,7 @@ class ProductsList extends AbstractProduct implements BlockInterface, IdentityIn
         Rule $rule,
         Conditions $conditionsHelper,
         CustomerSession $customerSession,
+        \Magento\Eav\Model\Config $eavConfig,
         \Magento\Wishlist\Model\Wishlist $wishlist,
         array $data = [],
         Json $json = null,
@@ -186,6 +188,7 @@ class ProductsList extends AbstractProduct implements BlockInterface, IdentityIn
         $this->categoryRepository = $categoryRepository ?? ObjectManager::getInstance()
             ->get(CategoryRepositoryInterface::class);
         $this->customerSession = $customerSession;
+        $this->_eavConfig = $eavConfig;
         $this->wishlist = $wishlist;
         parent::__construct(
             $context,
@@ -368,13 +371,42 @@ class ProductsList extends AbstractProduct implements BlockInterface, IdentityIn
          * several allowed values from condition simultaneously
          */
         $collection->distinct(true);
+
+        $attributeCode = "honey_product_type";
+        $attribute = $this->_eavConfig->getAttribute('catalog_product', $attributeCode);
+        $options = $attribute->getSource()->getAllOptions();
+        $wholesale=$retail=$all=0;
+
+        foreach ($options as $option) {
+            if ($option['value'] > 0) {
+                if($option['label']=="Wholesale")
+                {
+                    $wholesale=$option['value'];
+                }
+                elseif($option['label']=="Retail")
+                {
+                    $retail=$option['value'];
+                }
+                else
+                {
+                    $all=$option['value'];
+                }
+
+            }
+        }
+
         $customerGroupId = $this->customerSession->getCustomerGroupId();
 
         // For not-logged-in customers, Magento uses the customer group with ID 0 (NOT LOGGED IN)
         $customerGroupId = ($customerGroupId) ? $customerGroupId : 0;
-        if ($customerGroupId != 2) {
+        if ($customerGroupId == 2) {
 
-            $collection->addAttributeToFilter('wholesale_visibility', ['neq' => 1]);
+            $collection->addAttributeToFilter('honey_product_type', ['neq' => $retail]);
+        }
+        else
+        {
+            $collection->addAttributeToFilter('honey_product_type', ['neq' => $wholesale]);
+
         }
         return $collection;
     }

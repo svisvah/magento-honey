@@ -52,6 +52,8 @@ class NewWidget extends \Magento\Catalog\Block\Product\NewProduct implements \Ma
      * @var CustomerSession
      */
     protected $customerSession;
+
+    protected $eavConfig;
     /**
      * @var CustomerSession
      */
@@ -61,7 +63,7 @@ class NewWidget extends \Magento\Catalog\Block\Product\NewProduct implements \Ma
      */
 
     private $serializer;
-
+  
     /**
      * NewWidget constructor.
      *
@@ -80,11 +82,13 @@ class NewWidget extends \Magento\Catalog\Block\Product\NewProduct implements \Ma
         \Magento\Catalog\Model\Product\Visibility $catalogProductVisibility,
         \Magento\Framework\App\Http\Context $httpContext,
         CustomerSession $customerSession,
+        \Magento\Eav\Model\Config $eavConfig,
         \Magento\Wishlist\Model\Wishlist $wishlist,
         array $data = [],
         \Magento\Framework\Serialize\Serializer\Json $serializer = null
     ) {
         $this->customerSession = $customerSession;
+        $this->_eavConfig = $eavConfig;
         $this->wishlist = $wishlist;
         parent::__construct(
             $context,
@@ -104,13 +108,41 @@ class NewWidget extends \Magento\Catalog\Block\Product\NewProduct implements \Ma
      */
     protected function _getProductCollection()
     {
+        $attributeCode = "honey_product_type";
+        $attribute = $this->_eavConfig->getAttribute('catalog_product', $attributeCode);
+        $options = $attribute->getSource()->getAllOptions();
+        $wholesale=$retail=$all=0;
+
+        foreach ($options as $option) {
+            if ($option['value'] > 0) {
+                if($option['label']=="Wholesale")
+                {
+                    $wholesale=$option['value'];
+                }
+                elseif($option['label']=="Retail")
+                {
+                    $retail=$option['value'];
+                }
+                else
+                {
+                    $all=$option['value'];
+                }
+
+            }
+        }
         switch ($this->getDisplayType()) {
             case self::DISPLAY_TYPE_NEW_PRODUCTS:
                 $customerGroupId = $this->customerSession->getCustomerGroupId();
                 $customerGroupId = ($customerGroupId) ? $customerGroupId : 0;
                 $collection = parent::_getProductCollection();
-                if ($customerGroupId != 2) {
-                    $collection->addAttributeToFilter('wholesale_visibility', ['neq' => 1]);
+                if ($customerGroupId == 2) {
+
+                    $collection->addAttributeToFilter('honey_product_type', ['neq' => $retail]);
+                }
+                else
+                {
+                    $collection->addAttributeToFilter('honey_product_type', ['neq' => $wholesale]);
+        
                 }
                 $collection->setPageSize($this->getPageSize())
                     ->setCurPage($this->getCurrentPage());
@@ -131,11 +163,38 @@ class NewWidget extends \Magento\Catalog\Block\Product\NewProduct implements \Ma
     protected function _getRecentlyAddedProductsCollection()
     {
         /** @var $collection \Magento\Catalog\Model\ResourceModel\Product\Collection */
+        $attributeCode = "honey_product_type";
+        $attribute = $this->_eavConfig->getAttribute('catalog_product', $attributeCode);
+        $options = $attribute->getSource()->getAllOptions();
+        $wholesale=$retail=$all=0;
 
+        foreach ($options as $option) {
+            if ($option['value'] > 0) {
+                if($option['label']=="Wholesale")
+                {
+                    $wholesale=$option['value'];
+                }
+                elseif($option['label']=="Retail")
+                {
+                    $retail=$option['value'];
+                }
+                else
+                {
+                    $all=$option['value'];
+                }
+
+            }
+        }
         $customerGroupId = $this->customerSession->getCustomerGroupId();
         $customerGroupId = ($customerGroupId) ? $customerGroupId : 0;
-        if ($customerGroupId != 2) {
-            $collection->addAttributeToFilter('wholesale_visibility', ['neq' => 1]);
+        if ($customerGroupId == 2) {
+
+            $collection->addAttributeToFilter('honey_product_type', ['neq' => $retail]);
+        }
+        else
+        {
+            $collection->addAttributeToFilter('honey_product_type', ['neq' => $wholesale]);
+
         }
 
         $collection->setVisibility($this->_catalogProductVisibility->getVisibleInCatalogIds());

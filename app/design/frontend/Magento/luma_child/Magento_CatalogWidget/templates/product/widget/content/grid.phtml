@@ -40,117 +40,119 @@ use Magento\Framework\App\Action\Action;
                     <?php $iterator = 1; ?>
                     <?php foreach ($items as $_item) : ?>
                         <?= /* @noEscape */ ($iterator++ == 1) ? '<li class="product-item">' : '</li><li class="product-item">' ?>
-                        <div class="product-item-info">
+                        <?php if ($_item->isSaleable() == 0) : ?>
+                            <div class="product-item-info outofstock">
+                            <?php else : ?>
+                                <div class="product-item-info">
+                                <?php endif ?>
+
+                                <?php
+                                $block->setProduct($_item); // Set the current product in the block
+                                $productType = $_item->getTypeId();
+                                $discountPercentage = $block->getDiscountPercentage();
+                                $sale = "Sale";
+                                $wholesaleproduct = $_item->getData('wholesale_visibility');
+                                $wholesalelabel = "Wholesale";
+                                if ($discountPercentage > 0 && $wholesaleproduct > 0) {
+                                    echo '<div class="list-discount-percentage"> ' . $sale . '</div>';
+                                    echo '<div class="wholesale-product wholesale-color list-discount-percentage"> ' . $wholesalelabel . '</div>';
+                                } elseif ($wholesaleproduct > 0) {
+                                    echo '<div class="wholesale-color list-discount-percentage"> ' . $wholesalelabel . '</div>';
+                                } elseif ($discountPercentage) {
+                                    echo '<div class="list-discount-percentage"> ' . $sale . '</div>';
+                                }
+                                if ($_item->isSaleable() == 0) {
+                                    echo '<div class="outofstocklabel"> OUT OF STOCK </div>';
+                                }
 
 
-                            <?php
-                            $block->setProduct($_item); // Set the current product in the block
-                            $productType = $_item->getTypeId();
-                            $discountPercentage = $block->getDiscountPercentage();
-                            $sale = "Sale";
-                            $wholesaleproduct=$_item->getData('wholesale_visibility');
-                            $wholesalelabel="Wholesale";
-                            if($discountPercentage>0 && $wholesaleproduct>0)
-                            {
-                                echo '<div class="list-discount-percentage"> ' . $sale . '</div>';
-                                echo '<div class="wholesale-product wholesale-color list-discount-percentage"> ' . $wholesalelabel . '</div>';
-                            }
-                            elseif($wholesaleproduct>0)
-                            {
-                                echo '<div class="wholesale-color list-discount-percentage"> ' . $wholesalelabel . '</div>';
 
-                            }
-                            elseif($discountPercentage)
-                            {
-                                echo '<div class="list-discount-percentage"> ' . $sale . '</div>';
+                                ?>
 
-                            }
+                                <?php $om = \Magento\Framework\App\ObjectManager::getInstance();
+                                $customerSession = $om->get('Magento\Customer\Model\Session'); ?>
+                                <?php $customerId = $customerSession->getCustomer()->getId(); ?>
+                                <?php if ($showWishlist) : ?>
+                                    <?php $productid = $block->getProduct()->getId() ?>
+                                    <?php $isWishlistproductids = $block->getWishlistByProductId($productid, $customerId) ?>
 
+                                    <div class="actions-secondary" data-role="add-to-links">
+                                        <?php if ($this->helper(\Magento\Wishlist\Helper\Data::class)->isAllow() && $showWishlist) : ?>
+                                            <a href="#" data-post='<?= /* @noEscape */ $block->getAddToWishlistParams($_item) ?>' class="action towishlist <?= $isWishlistproductids ? 'added-to-wishlist' : '' ?>" data-action="add-to-wishlist" title="<?= $block->escapeHtmlAttr(__('Add to Wish List')) ?>">
+                                                <span><?= $block->escapeHtml(__('Add to Wish List')) ?></span>
+                                            </a>
+                                        <?php endif; ?>
 
-                            ?>
-
-                            <?php $om = \Magento\Framework\App\ObjectManager::getInstance();
-                            $customerSession = $om->get('Magento\Customer\Model\Session'); ?>
-                            <?php $customerId = $customerSession->getCustomer()->getId(); ?>
-                            <?php if ($showWishlist) : ?>
-                                <?php $productid = $block->getProduct()->getId() ?>
-                                <?php $isWishlistproductids = $block->getWishlistByProductId($productid, $customerId) ?>
-
-                                <div class="actions-secondary" data-role="add-to-links">
-                                    <?php if ($this->helper(\Magento\Wishlist\Helper\Data::class)->isAllow() && $showWishlist) : ?>
-                                        <a href="#" data-post='<?= /* @noEscape */ $block->getAddToWishlistParams($_item) ?>' class="action towishlist <?= $isWishlistproductids ? 'added-to-wishlist' : '' ?>" data-action="add-to-wishlist" title="<?= $block->escapeHtmlAttr(__('Add to Wish List')) ?>">
-                                            <span><?= $block->escapeHtml(__('Add to Wish List')) ?></span>
-                                        </a>
-                                    <?php endif; ?>
-
-                                </div>
-                            <?php endif; ?>
-                            <a href="<?= $block->escapeUrl($block->getProductUrl($_item)) ?>" class="product-item-photo">
-                                <?= $block->getImage($_item, $image)->toHtml() ?>
-                            </a>
-                            <div class="product-item-details">
-                                <strong class="product-item-name">
-                                    <a title="<?= $block->escapeHtml($_item->getName()) ?>" href="<?= $block->escapeUrl($block->getProductUrl($_item)) ?>" class="product-item-link">
-                                        <?= $block->escapeHtml($_item->getName()) ?>
-                                    </a>
-                                </strong>
-                                <?php if ($templateType) : ?>
-                                    <?= $block->getReviewsSummaryHtml($_item, $templateType) ?>
-                                <?php endif; ?>
-
-                                <?= $block->getProductPriceHtml($_item, $type) ?>
-
-                                <?= $block->getProductDetailsHtml($_item) ?>
-
-                                <?php if ($showWishlist || $showCompare || $showCart) : ?>
-                                    <div class="product-item-inner">
-                                        <div class="product-item-actions">
-                                            <?php if ($showCart) : ?>
-                                                <div class="actions-primary">
-                                                    <?php if ($_item->isSaleable()) : ?>
-                                                        <?php $postParams = $block->getAddToCartPostParams($_item); ?>
-
-                                                        <?php if ($productType == 'simple' || $productType == 'virtual') :
-                                                        ?>
-                                                            <form data-role="tocart-form" data-product-sku="<?= $block->escapeHtml($_item->getSku()) ?>" action="<?= $block->escapeUrl($postParams['action']) ?>" method="post">
-                                                                <input type="hidden" name="product" value="<?= $block->escapeHtmlAttr($postParams['data']['product']) ?>">
-                                                                <input type="hidden" name="<?= /* @noEscape */ Action::PARAM_NAME_URL_ENCODED ?>" value="<?= /* @noEscape */ $postParams['data'][Action::PARAM_NAME_URL_ENCODED] ?>">
-                                                                <?= $block->getBlockHtml('formkey') ?>
-                                                                <button type="submit" title="<?= $block->escapeHtml(__('Add to Cart')) ?>" class="action tocart primary">
-                                                                    <span><?= $block->escapeHtml(__('Add to Cart')) ?></span>
-                                                                </button>
-                                                            </form>
-
-
-                                                        <?php else : ?>
-                                                            <a href="<?= $block->escapeUrl($block->getProductUrl($_item)) ?>">
-                                                                <button type="submit" class="action tocart primary">
-                                                                    <span>View Details</span>
-                                                                </button>
-                                                            </a>
-                                                        <?php endif; ?>
-
-                                                    <?php else : ?>
-                                                        <?php if ($_item->isAvailable()) : ?>
-                                                            <div class="stock available"><span><?= $block->escapeHtml(__('In stock')) ?></span></div>
-                                                        <?php else : ?>
-                                                            <div class="stock unavailable"><span><?= $block->escapeHtml(__('Out of stock')) ?></span></div>
-                                                        <?php endif; ?>
-                                                    <?php endif; ?>
-                                                </div>
-                                            <?php endif; ?>
-
-                                        </div>
                                     </div>
-                                <?php endif; ?>
-                            </div>
-                        </div>
-                        <?= ($iterator == count($items) + 1) ? '</li>' : '' ?>
-                    <?php endforeach ?>
+                                    <div class="product-opacity">
+                                    <?php endif; ?>
+                                    <a href="<?= $block->escapeUrl($block->getProductUrl($_item)) ?>" class="product-item-photo">
+                                        <?= $block->getImage($_item, $image)->toHtml() ?>
+                                    </a>
+                                    <div class="product-item-details">
+                                        <strong class="product-item-name">
+                                            <a title="<?= $block->escapeHtml($_item->getName()) ?>" href="<?= $block->escapeUrl($block->getProductUrl($_item)) ?>" class="product-item-link">
+                                                <?= $block->escapeHtml($_item->getName()) ?>
+                                            </a>
+                                        </strong>
+                                        <?php if ($templateType) : ?>
+                                            <?= $block->getReviewsSummaryHtml($_item, $templateType) ?>
+                                        <?php endif; ?>
+
+                                        <?= $block->getProductPriceHtml($_item, $type) ?>
+
+                                        <?= $block->getProductDetailsHtml($_item) ?>
+
+                                        <?php if ($showWishlist || $showCompare || $showCart) : ?>
+                                            <div class="product-item-inner">
+                                                <div class="product-item-actions">
+                                                    <?php if ($showCart) : ?>
+                                                        <div class="actions-primary">
+                                                            <?php if ($_item->isSaleable()) : ?>
+                                                                <?php $postParams = $block->getAddToCartPostParams($_item); ?>
+
+                                                                <?php if ($productType == 'simple' || $productType == 'virtual') :
+                                                                ?>
+                                                                    <form data-role="tocart-form" data-product-sku="<?= $block->escapeHtml($_item->getSku()) ?>" action="<?= $block->escapeUrl($postParams['action']) ?>" method="post">
+                                                                        <input type="hidden" name="product" value="<?= $block->escapeHtmlAttr($postParams['data']['product']) ?>">
+                                                                        <input type="hidden" name="<?= /* @noEscape */ Action::PARAM_NAME_URL_ENCODED ?>" value="<?= /* @noEscape */ $postParams['data'][Action::PARAM_NAME_URL_ENCODED] ?>">
+                                                                        <?= $block->getBlockHtml('formkey') ?>
+                                                                        <button type="submit" title="<?= $block->escapeHtml(__('Add to Cart')) ?>" class="action tocart primary">
+                                                                            <span><?= $block->escapeHtml(__('Add to Cart')) ?></span>
+                                                                        </button>
+                                                                    </form>
+
+
+                                                                <?php else : ?>
+                                                                    <a href="<?= $block->escapeUrl($block->getProductUrl($_item)) ?>">
+                                                                        <button type="submit" class="action tocart primary">
+                                                                            <span>View Details</span>
+                                                                        </button>
+                                                                    </a>
+                                                                <?php endif; ?>
+
+                                                            <?php else : ?>
+                                                                <?php if ($_item->isAvailable()) : ?>
+                                                                    <div class="stock available"><span><?= $block->escapeHtml(__('In stock')) ?></span></div>
+                                                                <?php else : ?>
+                                                                    <div class="stock unavailable"><span><?= $block->escapeHtml(__('Out of stock')) ?></span></div>
+                                                                <?php endif; ?>
+                                                            <?php endif; ?>
+                                                        </div>
+                                                    <?php endif; ?>
+
+                                                </div>
+                                            </div>
+                                        <?php endif; ?>
+                                    </div>
+                                    </div>
+                                    <?= ($iterator == count($items) + 1) ? '</li>' : '' ?>
+                                <?php endforeach ?>
                 </ol>
             </div>
             <?= $block->getPagerHtml() ?>
         </div>
+    </div>
     </div>
     <?php if ($block->getBlockHtml('formkey')) : ?>
         <script type="text/x-magento-init">

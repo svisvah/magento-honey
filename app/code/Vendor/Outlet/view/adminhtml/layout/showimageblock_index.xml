@@ -1,0 +1,8 @@
+<!-- app/code/Turiknox/SampleImageUploader/view/adminhtml/layout/sampleimageuploader_image_showimages.xml -->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceContainer name="content">
+            <block class="Vendor\Outlet\Block\Showimageblock" name="showimagesblock" template="Vendor_Outlet::image/showimagesblock.phtml"/>
+        </referenceContainer>
+    </body>
+</page>

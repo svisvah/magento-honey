@@ -51,40 +51,44 @@ $_helper = $block->getData('outputHelper');
         <ol class="products list items product-items">
             <?php /** @var $_product \Magento\Catalog\Model\Product */ ?>
             <?php foreach ($_productCollection as $_product) : ?>
-                <li class="item product product-item">
+
+
+                <?php if ($_product->isSaleable() == 0) : ?>
+                    <li class="item product product-item outofstock">
+                    <?php else : ?>
+                    <li class="item product product-item">
+                    <?php endif ?>
 
                     <div class="product-item-info" id="product-item-info_<?= /* @noEscape */ $_product->getId() ?>" data-container="product-<?= /* @noEscape */ $viewMode ?>">
 
                         <?php
                         $block->setProduct($_product); // Set the current product in the block
                         $discountPercentage = $block->getDiscountPercentage();
-                        $sale="Sale";
-                        $productType=$_product->getTypeId();
-               
-                        $wholesaleproduct=$_product->getData('wholesale_visibility');
-                        $wholesalelabel="Wholesale";
-                        if($discountPercentage>0 && $wholesaleproduct>0 )
-                            {
-                                echo '<div class="list-discount-percentage"> ' . $sale . '</div>';
-                                echo '<div class="wholesale-product wholesale-color list-discount-percentage"> ' . $wholesalelabel . '</div>';
-                            }
-                            elseif($wholesaleproduct>0)
-                            {
-                                echo '<div class="wholesale-color list-discount-percentage"> ' . $wholesalelabel . '</div>';
+                        $sale = "Sale";
+                        $productType = $_product->getTypeId();
 
-                            }
-                            elseif($discountPercentage)
-                            {
-                                echo '<div class="list-discount-percentage"> ' . $sale . '</div>';
+                        $wholesaleproduct = $_product->getData('wholesale_visibility');
+                        $wholesalelabel = "Wholesale";
+                        if ($discountPercentage > 0 && $wholesaleproduct > 0) {
+                            echo '<div class="list-discount-percentage"> ' . $sale . '</div>';
+                            echo '<div class="wholesale-product wholesale-color list-discount-percentage"> ' . $wholesalelabel . '</div>';
+                        } elseif ($wholesaleproduct > 0) {
+                            echo '<div class="wholesale-color list-discount-percentage"> ' . $wholesalelabel . '</div>';
+                        } elseif ($discountPercentage) {
+                            echo '<div class="list-discount-percentage"> ' . $sale . '</div>';
+                        }
+                        if ($_product->isSaleable() == 0) {
+                            echo '<div class="outofstocklabel"> OUT OF STOCK </div>';
+                        }
 
-                            }
+
                         ?>
                         <div data-role="add-to-links" class="actions-secondary">
                             <?php if ($addToBlock = $block->getChildBlock('addto')) : ?>
                                 <?= $addToBlock->setProduct($_product)->getChildHtml() ?>
                             <?php endif; ?>
                         </div>
-                        <div>
+                        <div class="product-opacity">
                             <?php
                             $productImage = $block->getImage($_product, $imageDisplayArea);
                             $position = '';
@@ -116,72 +120,77 @@ $_helper = $block->getData('outputHelper');
                                             <?php if ($_product->isSaleable()) : ?>
                                                 <?php $postParams = $block->getAddToCartPostParams($_product); ?>
                                                 <?php if ($productType == 'simple' || $productType == 'virtual') :
-                                                        ?>
-                                                <form data-role="tocart-form" data-product-sku="<?= $escaper->escapeHtml($_product->getSku()) ?>" action="<?= $escaper->escapeUrl($postParams['action']) ?>" data-mage-init='{"catalogAddToCart": {}}' method="post">
-                                                    <?php $options = $block->getData('viewModel')->getOptionsData($_product); ?>
-                                                    <?php foreach ($options as $optionItem) : ?>
-                                                        <input type="hidden" name="<?= $escaper->escapeHtml($optionItem['name']) ?>" value="<?= $escaper->escapeHtml($optionItem['value']) ?>">
-                                                    <?php endforeach; ?>
-                                                    <input type="hidden" name="product" value="<?= /* @noEscape */ $postParams['data']['product'] ?>">
-                                                    <input type="hidden" name="<?= /* @noEscape */ Action::PARAM_NAME_URL_ENCODED ?>" value="<?=
-                                                                                                                                                /* @noEscape */ $postParams['data'][Action::PARAM_NAME_URL_ENCODED]
-                                                                                                                                                ?>">
-                                                    <?= $block->getBlockHtml('formkey') ?>
-                                                    <button type="submit" title="<?= $escaper->escapeHtmlAttr(__('Add to Cart')) ?>" class="action tocart primary" disabled>
-                                                        <span><?= $escaper->escapeHtml(__('Add to Cart')) ?></span>
-                                                    </button>
-                                                </form>
+                                                ?>
+                                                    <form data-role="tocart-form" data-product-sku="<?= $escaper->escapeHtml($_product->getSku()) ?>" action="<?= $escaper->escapeUrl($postParams['action']) ?>" data-mage-init='{"catalogAddToCart": {}}' method="post">
+                                                        <?php $options = $block->getData('viewModel')->getOptionsData($_product); ?>
+                                                        <?php foreach ($options as $optionItem) : ?>
+                                                            <input type="hidden" name="<?= $escaper->escapeHtml($optionItem['name']) ?>" value="<?= $escaper->escapeHtml($optionItem['value']) ?>">
+                                                        <?php endforeach; ?>
+                                                        <input type="hidden" name="product" value="<?= /* @noEscape */ $postParams['data']['product'] ?>">
+                                                        <input type="hidden" name="<?= /* @noEscape */ Action::PARAM_NAME_URL_ENCODED ?>" value="<?=
+                                                                                                                                                    /* @noEscape */ $postParams['data'][Action::PARAM_NAME_URL_ENCODED]
+                                                                                                                                                    ?>">
+                                                        <?= $block->getBlockHtml('formkey') ?>
+                                                        <button type="submit" title="<?= $escaper->escapeHtmlAttr(__('Add to Cart')) ?>" class="action tocart primary" disabled>
+                                                            <span><?= $escaper->escapeHtml(__('Add to Cart')) ?></span>
+                                                        </button>
+                                                    </form>
                                                 <?php else : ?>
-                                                            <a href="<?= $block->escapeUrl($block->getProductUrl($_product)) ?>">
-                                                                <button type="submit" class="action tocart primary">
-                                                                    <span>View Details</span>
-                                                                </button>
-                                                            </a>
-                                                        <?php endif; ?>
+                                                    <a href="<?= $block->escapeUrl($block->getProductUrl($_product)) ?>">
+                                                        <button type="submit" class="action tocart primary">
+                                                            <span>View Details</span>
+                                                        </button>
+                                                    </a>
+                                                <?php endif; ?>
                                             <?php else : ?>
                                                 <?php if ($_product->isAvailable()) : ?>
                                                     <div class="stock available">
                                                         <span><?= $escaper->escapeHtml(__('In stock')) ?></span>
                                                     </div>
                                                 <?php else : ?>
-                                                    <div class="stock unavailable">
-                                                        <span><?= $escaper->escapeHtml(__('Out of stock')) ?></span>
-                                                    </div>
+                                                    <?php
+                                                    $notifystock = $block->getUrl() . "/productalert/add/stock/product_id/" . $_product->getId();
+                                                    ?>
+                                                    <div class="outofstocknotifybutton">
+                                                        <a href=<?php $notify ?>><button id="notifystock">Notify</button></a>
+                                                        <div class="stock unavailable">
+                                                            <span><?= $escaper->escapeHtml(__('Out of stock')) ?></span>
+                                                        </div>
+                                                    <?php endif; ?>
                                                 <?php endif; ?>
-                                            <?php endif; ?>
-                                        </div>
-                                        <?= ($pos && strpos($pos, $viewMode . '-primary')) ?
-                                            /* @noEscape */ $secureRenderer->renderStyleAsTag(
-                                                $position,
-                                                'product-item-info_' . $_product->getId() . ' div.actions-primary'
-                                            ) : '' ?>
+                                                    </div>
+                                                    <?= ($pos && strpos($pos, $viewMode . '-primary')) ?
+                                                        /* @noEscape */ $secureRenderer->renderStyleAsTag(
+                                                            $position,
+                                                            'product-item-info_' . $_product->getId() . ' div.actions-primary'
+                                                        ) : '' ?>
 
-                                        <?= ($pos && strpos($pos, $viewMode . '-secondary')) ?
-                                            /* @noEscape */ $secureRenderer->renderStyleAsTag(
-                                                $position,
-                                                'product-item-info_' . $_product->getId() . ' div.actions-secondary'
-                                            ) : '' ?>
-                                    </div>
-                                    <?php if ($showDescription) : ?>
-                                        <div class="product description product-item-description">
-                                            <?= /* @noEscape */ $_helper->productAttribute(
-                                                $_product,
-                                                $_product->getShortDescription(),
-                                                'short_description'
-                                            ) ?>
-                                            <a href="<?= $escaper->escapeUrl($_product->getProductUrl()) ?>" title="<?= /* @noEscape */ $_productNameStripped ?>" class="action more"><?= $escaper->escapeHtml(__('Learn More')) ?></a>
+                                                    <?= ($pos && strpos($pos, $viewMode . '-secondary')) ?
+                                                        /* @noEscape */ $secureRenderer->renderStyleAsTag(
+                                                            $position,
+                                                            'product-item-info_' . $_product->getId() . ' div.actions-secondary'
+                                                        ) : '' ?>
                                         </div>
-                                    <?php endif; ?>
+                                        <?php if ($showDescription) : ?>
+                                            <div class="product description product-item-description">
+                                                <?= /* @noEscape */ $_helper->productAttribute(
+                                                    $_product,
+                                                    $_product->getShortDescription(),
+                                                    'short_description'
+                                                ) ?>
+                                                <a href="<?= $escaper->escapeUrl($_product->getProductUrl()) ?>" title="<?= /* @noEscape */ $_productNameStripped ?>" class="action more"><?= $escaper->escapeHtml(__('Learn More')) ?></a>
+                                            </div>
+                                        <?php endif; ?>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <?= ($pos && strpos($pos, $viewMode . '-actions')) ?
-                            /* @noEscape */ $secureRenderer->renderStyleAsTag(
-                                $position,
-                                'product-item-info_' . $_product->getId() . ' div.product-item-actions'
-                            ) : '' ?>
-                </li>
-            <?php endforeach; ?>
+                            <?= ($pos && strpos($pos, $viewMode . '-actions')) ?
+                                /* @noEscape */ $secureRenderer->renderStyleAsTag(
+                                    $position,
+                                    'product-item-info_' . $_product->getId() . ' div.product-item-actions'
+                                ) : '' ?>
+                    </li>
+                <?php endforeach; ?>
         </ol>
     </div>
     <?= $block->getChildBlock('toolbar')->setIsBottom(true)->toHtml() ?>

@@ -1,0 +1,22 @@
+{
+    "name": "magelearn/module-Contactus",
+    "description": "Magento2 Save Contactus data in database and display it in backend admin grid.",
+    "type": "magento2-module",
+    "license": "OSL-3.0",
+    "authors": [
+        {
+            "email": "vijaymrami@gmail.com",
+            "name": "vijay rami"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {},
+    "autoload": {
+        "files": [
+            "registration.php"
+        ],
+        "psr-4": {
+            "Magelearn\\Contactus\\": ""
+        }
+    }
+}

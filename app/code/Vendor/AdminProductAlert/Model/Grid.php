@@ -16,8 +16,6 @@ class Grid extends \Magento\Framework\Model\AbstractModel implements GridInterfa
     const SEND_COUNT = 'send_count';
     const STATUS = 'status';
     
-
-
     /**
      * CMS page cache tag.
      */
