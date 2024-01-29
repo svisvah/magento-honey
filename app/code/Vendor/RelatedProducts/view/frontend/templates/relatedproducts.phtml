@@ -2,28 +2,24 @@
 $productCollection = $block->getItems();
 $enableProductRelate = $block->getEnableProductRelate();
 $productLimit = $block->getProductLimit();
+$categories = $block->getCurrentCategoryId();
+
 
 if ($productCollection->getSize() > 0) :
     $i = 0;
-?>
+    ?>
     <?php if ($enableProductRelate != 0) : ?>
         <div class="block widget block-products-list grid">
             <div class="block-title">
                 <strong><?= $block->escapeHtml(__('Related Products')) ?></strong>
             </div>
             <div class="block-content">
-                <div class="products-grid grid">
-                <?php if ($productLimit == 3 || $productLimit == 4) : ?>
-                    <ol class="product-items widget-product-grid">
-                        <?php else:?>
-                    <ol class="product-items widget-product-grid related-products-slider owl-carousel">
-                     <?php endif;?>
+                <div class="products-grid grid ">
+                        <ol class="product-items widget-product-grid related-products-slider owl-carousel owl-theme">
                         <?php foreach ($productCollection as $product) : ?>
-                            <?php if ($productLimit == 3 || $productLimit == 4) : ?>
                                 <?php if ($i == $productLimit) : ?>
                                     <?php break; ?>
-                                <?php endif ?>
-                            <?php endif ?>
+                                <?php endif; ?>
                             <?php
                             $currencyCode = $block->getCurrencyCode();
                             $oldPrice = $block->getOldPrice($product->getId());
@@ -31,99 +27,98 @@ if ($productCollection->getSize() > 0) :
                             $discountPercentage = $block->getDiscountPercentage($product->getId());
                             ?>
                             <li class="product-item item">
-                                <?php if ($product->isSaleable() == 0) : ?>
-                                    <div class="product-item-info outofstock">
-                                    <?php else : ?>
-                                        <div class="product-item-info">
-                                        <?php endif ?>
-                                        <?php
-                                        $sale = "Sale";
-                                        $productType = $product->getTypeId();
-
-                                        $wholesaleproduct = $product->getData('wholesale_visibility');
-                                        $wholesalelabel = "Wholesale";
-                                        if ($specialPrice > 0 && $wholesaleproduct > 0) {
-                                            echo '<div class="list-discount-percentage"> ' . $sale . '</div>';
-                                            echo '<div class="wholesale-product wholesale-color list-discount-percentage"> ' . $wholesalelabel . '</div>';
-                                        } elseif ($wholesaleproduct > 0) {
-                                            echo '<div class="wholesale-color list-discount-percentage"> ' . $wholesalelabel . '</div>';
-                                        } elseif ($specialPrice) {
-                                            echo '<div class="list-discount-percentage"> ' . $sale . '</div>';
-                                        }
-                                        if ($product->isSaleable() == 0) {
-                                            echo '<div class="outofstocklabel"> OUT OF STOCK </div>';
-                                        }
-                                        ?>
-                                        <div class="product actions product-item-actions">
-                                            <div class="secondary-addto-links actions-secondary" data-role="add-to-links">
-                                                <div class="checking"></div>
-                                                <a href="#" class="action towishlist " title="Add to Wish List" aria-label="Add to Wish List" data-post='<?= $block->escapeHtml(json_encode(['action' => 'http://new.magento.com/wishlist/index/add/', 'data' => ['product' => $product->getId(), 'uenc' => 'aHR0cDovL25ldy5tYWdlbnRvLmNvbS9pbmRpYW4tcm9zZXdvb2QtaG9uZXkuaHRtbA~~']])) ?>' data-action="add-to-wishlist" role="button">
-                                                    <span>Add to Wish List</span>
-                                                </a>
-                                            </div>
-                                        </div>
-                                        <div class="product-opacity">
-                                            <a class="product-item-photo" href="<?= $block->escapeUrl($product->getProductUrl()) ?>">
-                                                <span class="product-image-container product-image-container-<?= $product->getId() ?>" style="width: 240px;">
-                                                    <span class="product-image-wrapper" style="padding-bottom: 125%;">
-                                                        <?php
-                                                        $thumbnailImageUrl = $block->getProductImageUrl($product->getId());
-                                                        if ($thumbnailImageUrl) :
-                                                        ?>
-                                                            <img class="product-image-photo" src="<?= $block->escapeUrl($thumbnailImageUrl) ?>" alt="<?= $block->escapeHtmlAttr($product->getName()) ?>" loading="lazy" width="240" height="300" style="width:100%" />
-                                                        <?php endif; ?>
-                                                    </span>
-                                                </span>
+                                <?php $productStatusClass = $product->isSaleable() ? '' : ' outofstock'; ?>
+                                <div class="product-item-info<?= $productStatusClass ?>">
+                                    <?php
+                                    $sale = "Sale";
+                                    $productType = $product->getTypeId();
+                                    $wholesaleproduct = $product->getData('wholesale_visibility');
+                                    $wholesalelabel = "Wholesale";
+                                    if ($specialPrice > 0 && $wholesaleproduct > 0) {
+                                        echo '<div class="list-discount-percentage sale"> ' . $sale . '</div>';
+                                        echo '<div class="wholesale-product wholesale-color list-discount-percentage"> ' . $wholesalelabel . '</div>';
+                                    } elseif ($wholesaleproduct > 0) {
+                                        echo '<div class="wholesale-color list-discount-percentage"> ' . $wholesalelabel . '</div>';
+                                    } elseif ($specialPrice) {
+                                        echo '<div class="list-discount-percentage sale"> ' . $sale . '</div>';
+                                    }
+                                    if ($product->isSaleable() == 0) {
+                                        echo '<div class="outofstocklabel"> OUT OF STOCK </div>';
+                                    }
+                                    ?>
+                                    <div class="product actions product-item-actions">
+                                        <div class="secondary-addto-links actions-secondary" data-role="add-to-links">
+                                            <div class="checking"></div>
+                                            <?php $isWishlistproductids = $block->getWishlistByProductId($product->getId()) ?>
+                                            <a href="#" data-post='<?= /* @noEscape */ $block->getAddToWishlistParams($product) ?>' class="action towishlist <?= $isWishlistproductids ? 'added-to-wishlist' : '' ?>" data-action="add-to-wishlist" title="<?= $block->escapeHtmlAttr(__('Add to Wish List')) ?>">
+                                                <span><?= $block->escapeHtml(__('Add to Wish List')) ?></span>
                                             </a>
-                                            <div class="product details product-item-details">
-                                                <strong class="product name product-item-name">
-                                                    <a class="product-item-link" href="<?= $block->escapeUrl($product->getProductUrl()) ?>">
-                                                        <?= $block->escapeHtml($product->getName()) ?>
-                                                    </a>
-                                                </strong>
-                                                <?php if ($oldPrice == $specialPrice) : ?>
-                                                    <div class="price-box price-final_price" data-role="priceBox" data-product-id="<?= $product->getId() ?>" data-price-box="product-id-<?= $product->getId() ?>">
-                                                        <span class="normal-price">
-                                                            <span class="price-container price-final_price tax weee">
-                                                                <span class="price-label"></span>
-                                                                <span id="product-price-<?= $product->getId() ?>" data-price-amount="<?= $oldPrice ?>" data-price-type="finalPrice" class="price-wrapper ">
-                                                                    <span class="price"><?= $currencyCode ?>&nbsp;<?= number_format($oldPrice, 2) ?></span>
-                                                                </span>
+                                        </div>
+                                    </div>
+                                    <div class="product-opacity">
+                                        <a class="product-item-photo" href="<?= $block->escapeUrl($product->getProductUrl()) ?>">
+                                            <span class="product-image-container product-image-container-<?= $product->getId() ?>" style="width: 240px;">
+                                                <span class="product-image-wrapper" style="padding-bottom: 125%;">
+                                                    <?php
+                                                    $thumbnailImageUrl = $block->getProductImageUrl($product->getId());
+                                                    if ($thumbnailImageUrl) :
+                                                    ?>
+                                                        <img class="product-image-photo" src="<?= $block->escapeUrl($thumbnailImageUrl) ?>" alt="<?= $block->escapeHtmlAttr($product->getName()) ?>" loading="lazy" width="240" height="300" style="width:100%" />
+                                                    <?php endif; ?>
+                                                </span>
+                                            </span>
+                                        </a>
+                                        <div class="product-item-details">
+                                            <strong class="product-item-name">
+                                                <a class="product-item-link" href="<?= $block->escapeUrl($product->getProductUrl()) ?>">
+                                                    <?= $block->escapeHtml($product->getName()) ?>
+                                                </a>
+                                            </strong>
+                                            
+                                            <?php if ($oldPrice == $specialPrice) : ?>
+                                                <div class="price-box price-final_price" data-role="priceBox" data-product-id="<?= $product->getId() ?>" data-price-box="product-id-<?= $product->getId() ?>">
+                                                    <span class="normal-price">
+                                                        <span class="price-container price-final_price tax weee">
+                                                            <span class="price-label"></span>
+                                                            <span id="product-price-<?= $product->getId() ?>" data-price-amount="<?= $oldPrice ?>" data-price-type="finalPrice" class="price-wrapper ">
+                                                                <span class="price"><?= $currencyCode ?>&nbsp;<?= number_format($oldPrice, 2) ?></span>
                                                             </span>
                                                         </span>
-                                                    </div>
-                                                <?php endif; ?>
-                                                <?php if ($oldPrice != $specialPrice) : ?>
-                                                    <div class="price-box price-final_price" data-role="priceBox" data-product-id="<?= $product->getId() ?>" data-price-box="product-id-<?= $product->getId() ?>">
-                                                        <span class="old-price">
-                                                            <span class="price-container price-final_price tax weee">
-                                                                <span id="old-price-<?= $product->getId() ?>" data-price-amount="<?= $oldPrice ?>" data-price-type="oldPrice" class="price-wrapper ">
-                                                                    <span class="price"><?= $currencyCode ?>&nbsp;<?= number_format($oldPrice, 2) ?></span>
-                                                                </span>
+                                                    </span>
+                                                </div>
+                                            <?php endif; ?>
+                                            <?php if ($oldPrice != $specialPrice) : ?>
+                                                <div class="price-box price-final_price" data-role="priceBox" data-product-id="<?= $product->getId() ?>" data-price-box="product-id-<?= $product->getId() ?>">
+                                                    <span class="old-price">
+                                                        <span class="price-container price-final_price tax weee">
+                                                            <span id="old-price-<?= $product->getId() ?>" data-price-amount="<?= $oldPrice ?>" data-price-type="oldPrice" class="price-wrapper ">
+                                                                <span class="price"><?= $currencyCode ?>&nbsp;<?= number_format($oldPrice, 2) ?></span>
                                                             </span>
                                                         </span>
-                                                        <span class="special-price">
-                                                            <span class="price-container price-final_price tax weee">
-                                                                <span id="product-price-<?= $product->getId() ?>" data-price-amount="<?= $specialPrice ?>" data-price-type="finalPrice" class="price-wrapper ">
-                                                                    <span class="price"><?= $currencyCode ?>&nbsp;<?= number_format($specialPrice, 2) ?></span>
-                                                                </span>
+                                                    </span>
+                                                    <span class="special-price">
+                                                        <span class="price-container price-final_price tax weee">
+                                                            <span id="product-price-<?= $product->getId() ?>" data-price-amount="<?= $specialPrice ?>" data-price-type="finalPrice" class="price-wrapper ">
+                                                                <span class="price"><?= $currencyCode ?>&nbsp;<?= number_format($specialPrice, 2) ?></span>
                                                             </span>
                                                         </span>
                                                         <?php if ($discountPercentage > 0) : ?>
                                                             <span class="related-discount-label"><?= "(" . $discountPercentage . " Off)" ?></span>
                                                         <?php endif; ?>
-                                                    </div>
-                                                <?php endif; ?>
-
-                                                <div class="actions-primary">
-                                                    <?php if ($product->isSaleable() != 0) : ?>
-                                                        <button type="button" title="Add to Cart" class="action tocart primary" data-post='<?= $block->escapeHtml(json_encode(['action' => 'http://new.magento.com/checkout/cart/add/', 'data' => ['product' => $product->getId(), 'uenc' => 'aHR0cDovL25ldy5tYWdlbnRvLmNvbS9pbmRpYW4tcm9zZXdvb2QtaG9uZXkuaHRtbA~~']])) ?>' role="button">
-                                                            <span>Add to Cart</span>
-                                                        </button>
-                                                    <?php endif; ?>
+                                                    </span>
                                                 </div>
+                                            <?php endif; ?>
+
+                                            <div class="actions-primary">
+                                                <?php if ($product->isSaleable() != 0) : ?>
+                                                    <button type="button" title="Add to Cart" class="action tocart primary" data-post='<?= $block->escapeHtml(json_encode(['action' => $block->getUrl('checkout/cart/add'), 'data' => ['product' => $product->getId(), 'uenc' => $block->getUenc()]])) ?>' role="button">
+                                                        <span>Add to Cart</span>
+                                                    </button>
+                                                <?php endif; ?>
                                             </div>
                                         </div>
+                                    </div>
+                                </div>
                             </li>
                             <?php $i++ ?>
                         <?php endforeach; ?>
@@ -140,23 +135,37 @@ if ($productCollection->getSize() > 0) :
 
 <script type="text/javascript">
     require(['jquery', 'vpowlcarousel'], function($) {
-        // $(document).ready(function() {
-            $(".related-products-slider").owlCarousel({
-                loop: false,
-                margin: 10,
-                nav: true,
-                responsive: {
-                    0: {
-                        items: 1
-                    },
-                    600: {
-                        items: 2
-                    },
-                    1000: {
-                        items: 5
-                    }
-                }
-            });
-        // });
+        $(document).ready(function() {
+            $('.related-products-slider').owlCarousel({
+  loop: false,
+  margin: 10,
+  nav: true,
+  navText: [
+    "<i class='fa fa-caret-left'></i>",
+    "<i class='fa fa-caret-right'></i>"
+  ],
+  autoplay: true,
+  autoplayHoverPause: true,
+  responsive: {
+    0: {
+      items: 1
+    },
+    320: {
+      items: 2
+    },
+    510:
+    {
+        items:3
+    },
+    800:
+    {
+        items:4
+    },
+    1025: {
+      items: 5
+    }
+  }
+})
+        });
     });
 </script>

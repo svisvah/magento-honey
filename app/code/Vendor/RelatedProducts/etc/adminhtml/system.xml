@@ -18,10 +18,11 @@ xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file
         <label>Enable Related Products</label>
         <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
     </field>
-              <field id="product_limit" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
-   <label>Number of products limit</label>     
-   <source_model>Vendor\RelatedProducts\Model\Config\Source\ListMode</source_model>
-</field>
+    <field id="product_limit" translate="label" 
+                type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Product Limit</label>
+                    <comment>Maximum products should be limited is 10</comment>
+                </field>
                 <field id="exclude_category" translate="label" type="multiselect" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="20">
                     <source_model>Vendor\RelatedProducts\Model\Source\Attribute</source_model>
                     <frontend_model>Vendor\RelatedProducts\Block\Adminhtml\MultiUiSelect</frontend_model>

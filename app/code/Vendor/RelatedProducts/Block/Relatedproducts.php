@@ -1,4 +1,5 @@
 <?php
+
 namespace Vendor\RelatedProducts\Block;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
@@ -20,6 +21,8 @@ class Relatedproducts extends Template
     protected $customerSession;
     protected $imageHelper;
     protected $productFactory;
+    protected $wishlist;
+    protected $_reviewFactory;
 
     public function __construct(
         Context $context,
@@ -33,6 +36,8 @@ class Relatedproducts extends Template
         \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productCollectionFactory,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Review\Model\RatingFactory $ratingFactory,
+        \Magento\Wishlist\Model\Wishlist $wishlist,
+        \Magento\Review\Model\RatingFactory $reviewFactory,
 
         array $data = []
     ) {
@@ -47,6 +52,8 @@ class Relatedproducts extends Template
         $this->_productCollectionFactory = $productCollectionFactory;
         $this->customerSession = $customerSession;
         $this->_ratingFactory = $ratingFactory;
+        $this->wishlist = $wishlist;
+        $this->_reviewFactory = $reviewFactory;
     }
 
     public function getCurrentProductId()
@@ -64,37 +71,50 @@ class Relatedproducts extends Template
     {
         $productId = $this->getCurrentProductId();
 
-        if ($productId) {
-            $product = $this->productRepository->getById($productId);
-            $categoryIds = $product->getCategoryIds();
+        $category = $this->registry->registry('current_category');
+        if ($category == null) {
+            if ($productId) {
+                $product = $this->productRepository->getById($productId);
+                $categoryIds = $product->getCategoryIds();
 
-            $categories = [];
-            foreach ($categoryIds as $categoryId) {
-                $category = $this->categoryRepository->get($categoryId);
-                $categories[] = $category->getName();
+                $categories = [];
+                foreach ($categoryIds as $categoryId) {
+                    $category = $this->categoryRepository->get($categoryId);
+                    $categories[] = $category->getName();
+                }
+
+                return $categories;
             }
 
+            return [];
+        } else {
+            $categories[] = $category->getName();
             return $categories;
         }
-
-        return [];
     }
 
     public function getProductCategoriesId()
     {
+
         $productId = $this->getCurrentProductId();
+        $category = $this->registry->registry('current_category');
+        if ($category == null) {
+            if ($productId) {
+                $product = $this->productRepository->getById($productId);
+                $categoryIds = $product->getCategoryIds();
 
-        if ($productId) {
-            $product = $this->productRepository->getById($productId);
-            $categoryIds = $product->getCategoryIds();
 
-         
+                return $categoryIds;
+            }
+
+            return [];
+        } else {
+            $categoryIds[] = $category->getId();
             return $categoryIds;
         }
-
-        return [];
     }
-    
+
+
 
     public function getExcludedCategories()
     {
@@ -102,10 +122,10 @@ class Relatedproducts extends Template
             'related_section/related_group/exclude_category',
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
-    
+
         $excludeCategoryIds = explode(',', $excludeCategories);
         $categoryNames = [];
-    
+
         foreach ($excludeCategoryIds as $categoryId) {
             try {
                 $category = $this->categoryRepository->get($categoryId);
@@ -115,7 +135,7 @@ class Relatedproducts extends Template
                 $this->_logger->error("Category with ID $categoryId not found.");
             }
         }
-    
+
         return $categoryNames;
     }
 
@@ -126,38 +146,36 @@ class Relatedproducts extends Template
             'related_section/related_group/exclude_category',
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
-    
+
         $excludeCategoryIds = explode(',', $excludeCategories);
-       
-    
+
+
         return $excludeCategoryIds;
     }
 
     public function getRelatedCategories()
     {
-        $ProductCategories=$this->getProductCategories();
-        $ExcludedCategories=$this->getExcludedCategories();
+        $ProductCategories = $this->getProductCategories();
+        $ExcludedCategories = $this->getExcludedCategories();
 
-      $filtered_array=array_diff($ProductCategories, $ExcludedCategories); 
-        
-return $filtered_array;
-  
-}
+        $filtered_array = array_diff($ProductCategories, $ExcludedCategories);
 
-public function getRelatedCategoriesId()
-{
-    $ProductCategories=$this->getProductCategoriesId();
-    $ExcludedCategories=$this->getExcludedCategoriesId();
+        return $filtered_array;
+    }
 
-  $filtered_array=array_diff($ProductCategories, $ExcludedCategories); 
-    
-return $filtered_array;
-
-}
-
-public function getProductCollectionByCategories()
+    public function getRelatedCategoriesId()
     {
-        $ids[]=$this->getRelatedCategoriesId();
+        $ProductCategories = $this->getProductCategoriesId();
+        $ExcludedCategories = $this->getExcludedCategoriesId();
+
+        $filtered_array = array_diff($ProductCategories, $ExcludedCategories);
+
+        return $filtered_array;
+    }
+
+    public function getProductCollectionByCategories()
+    {
+        $ids[] = $this->getRelatedCategoriesId();
         $collection = $this->_productCollectionFactory->create();
         $collection->addAttributeToSelect('*');
         $collection->addCategoriesFilter(['in' => $ids]);
@@ -171,109 +189,92 @@ public function getProductCollectionByCategories()
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
         return $enableProductRelate;
+    }
 
-
-}
-
-public function getProductLimit()
-{
-    $productLimit = $this->scopeConfig->getValue(
-        'related_section/related_group/product_limit',
-        \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-    );
-    return $productLimit;
-
-
-}
-public function getRelatedProductsIds()
-{
-    $productCollection = $this->getProductCollectionByCategories();
-    $productIds=[];
-    foreach($productCollection as $productColl)
+    public function getProductLimit()
     {
-        $productIds[]=$productColl->getId();
-    }
-    $currentProductId[] = $this->getCurrentProductId();
-
-    $product_filter_ids=array_diff($productIds, $currentProductId);
-    
-    return $product_filter_ids;
-
-}
-
-
-public function getCustomerGroup()
-{
-    $customerGroupId = $this->customerSession->getCustomerGroupId();
-    return $customerGroupId;
-
-}
-
-public function getFilteredProducts()
-{
-    $productCollection = $this->getProductCollectionByCategories();
-    $attributeCode = "honey_product_type";
-    $attribute = $this->_eavConfig->getAttribute('catalog_product', $attributeCode);
-    $options = $attribute->getSource()->getAllOptions();
-    $wholesale=$retail=$all=0;
-
-    foreach ($options as $option) {
-        if ($option['value'] > 0) {
-            if($option['label']=="Wholesale")
-            {
-                $wholesale=$option['value'];
-            }
-            elseif($option['label']=="Retail")
-            {
-                $retail=$option['value'];
-            }
-            else
-            {
-                $all=$option['value'];
-            }
-
-        }
-    }
-
-
-    $customerGroupId = $this->customerSession->getCustomerGroupId();
-    $customerGroupId = ($customerGroupId) ? $customerGroupId : 0;
-    if ($customerGroupId == 2) {
-
-        $productCollection->addAttributeToFilter('honey_product_type', ['neq' => $retail]);
-    }
-    else
-    {
-        $productCollection->addAttributeToFilter('honey_product_type', ['neq' => $wholesale]);
-
-    }
-    return $productCollection;
-    
-
-}
-public function getFilteredProductIds()
-{
-    $filteredProductCollection = $this->getFilteredProducts();
-    $currentProductId = $this->getCurrentProductId();
-
-    $productIds = [];
-    foreach ($filteredProductCollection as $filterProducts) {
-        if ($filterProducts->getId() != $currentProductId) {
-            $productIds[] = $filterProducts->getId();
-        }
-    }
-
-    return $productIds;
-}
-
-public function getProductImageUrl($id)
-    {
-        try 
+        $productLimit = $this->scopeConfig->getValue(
+            'related_section/related_group/product_limit',
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
+        if($productLimit>10)
         {
+            return 10;
+        }
+        return $productLimit;
+    }
+    public function getRelatedProductsIds()
+    {
+        $productCollection = $this->getProductCollectionByCategories();
+        $productIds = [];
+        foreach ($productCollection as $productColl) {
+            $productIds[] = $productColl->getId();
+        }
+        $currentProductId[] = $this->getCurrentProductId();
+
+        $product_filter_ids = array_diff($productIds, $currentProductId);
+
+        return $product_filter_ids;
+    }
+
+
+    public function getCustomerGroup()
+    {
+        $customerGroupId = $this->customerSession->getCustomerGroupId();
+        return $customerGroupId;
+    }
+
+    public function getFilteredProducts()
+    {
+        $productCollection = $this->getProductCollectionByCategories();
+        $attributeCode = "honey_product_type";
+        $attribute = $this->_eavConfig->getAttribute('catalog_product', $attributeCode);
+        $options = $attribute->getSource()->getAllOptions();
+        $wholesale = $retail = $all = 0;
+
+        foreach ($options as $option) {
+            if ($option['value'] > 0) {
+                if ($option['label'] == "Wholesale") {
+                    $wholesale = $option['value'];
+                } elseif ($option['label'] == "Retail") {
+                    $retail = $option['value'];
+                } else {
+                    $all = $option['value'];
+                }
+            }
+        }
+
+
+        $customerGroupId = $this->customerSession->getCustomerGroupId();
+        $customerGroupId = ($customerGroupId) ? $customerGroupId : 0;
+        if ($customerGroupId == 2) {
+
+            $productCollection->addAttributeToFilter('honey_product_type', ['neq' => $retail]);
+        } else {
+            $productCollection->addAttributeToFilter('honey_product_type', ['neq' => $wholesale]);
+        }
+        return $productCollection;
+    }
+    public function getFilteredProductIds()
+    {
+        $filteredProductCollection = $this->getFilteredProducts();
+        $currentProductId = $this->getCurrentProductId();
+
+        $productIds = [];
+        foreach ($filteredProductCollection as $filterProducts) {
+            if ($filterProducts->getId() != $currentProductId) {
+                $productIds[] = $filterProducts->getId();
+            }
+        }
+
+        return $productIds;
+    }
+
+    public function getProductImageUrl($id)
+    {
+        try {
             $product = $this->productFactory->create()->load($id);
-        } 
-        catch (\Exception $e) 
-        {
+        } catch (\Exception $e) {
             return 'Data not found';
         }
         $url = $this->imageHelper->init($product, 'product_small_image')->getUrl();
@@ -287,7 +288,7 @@ public function getProductImageUrl($id)
         $collection = $this->_productCollectionFactory->create();
         $collection->addIdFilter($filteredProductIds);
 
-        $collection->addAttributeToSelect('*'); 
+        $collection->addAttributeToSelect('*');
         $collection->addAttributeToFilter('visibility', \Magento\Catalog\Model\Product\Visibility::VISIBILITY_BOTH);
         $collection->addAttributeToFilter('status', \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED);
         $collection->load();
@@ -332,19 +333,28 @@ public function getProductImageUrl($id)
             return null;
         }
     }
-    public function getRatingCollection(){
-        $ratingCollection = $this->_ratingFactory->create()
-        ->getResourceCollection()
-        ->addEntityFilter(
-            'product' 
-        )->setPositionOrder()->setStoreFilter(
-            $this->_storeManager->getStore()->getId()
-        )->addRatingPerStoreName(
-            $this->_storeManager->getStore()->getId()
-        )->load();
-
-        return $ratingCollection->getData();
+    public function getRatingSummary($productId)
+    {
+        $product = $this->productFactory->create()->load($productId);
+        $storeId = $this->_storeManager->getStore()->getId();
+        $rating = $this->_reviewFactory->create()->getEntitySummary($product, $storeId);
+        return $rating ? $rating->getRatingSummary() : 0;
     }
-    
+    public function getWishlistByProductId($productId)
+    {
 
+        $customerId = $this->customerSession->getCustomerId();
+
+        if ($customerId) {
+            $wishlist = $this->wishlist->loadByCustomerId($customerId)->getItemCollection();
+            $productIds = [];
+            foreach ($wishlist as $item) {
+                $productIds[] = $item->getProductId();
+            }
+
+            return in_array($productId, $productIds);
+        }
+
+        return false;
+    }
 }
